@@ -420,7 +420,8 @@ export default function Dashboard({ navigate }) {
   const [activeView, setActiveView] = useState('chat'); // 'chat', 'study-guide', 'quiz', 'audio-overview', 'outline'
   const [activeNoteId, setActiveNoteId] = useState(null);
   const [isLeftPaneCollapsed, setIsLeftPaneCollapsed] = useState(false);
-  const [isRightPaneCollapsed, setIsRightPaneCollapsed] = useState(false);
+  const [isRightPaneCollapsed, setIsRightPaneCollapsed] = useState(true);
+  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(true);
   const [rightPanelTab, setRightPanelTab] = useState('notes'); // 'notes', 'flashcards'
 
   // Modals
@@ -1229,1276 +1230,244 @@ It contains structural elements and biological pathway details.`;
   };
 
   return (
-    <div className="bg-background text-on-surface font-sans antialiased h-screen overflow-hidden flex flex-col select-none selection:bg-primary/10">
+    <div className="flex h-screen bg-gray-50 text-gray-900 font-sans selection:bg-blue-100 overflow-hidden">
       
-      {/* ── TOP NAV BAR ── */}
-      <header className="flex justify-between items-center px-lg w-full fixed top-0 z-50 h-14 border-b border-outline-variant bg-white/80 backdrop-blur-xl">
-        <div className="flex items-center gap-md">
-          <span 
-            className="font-headline-lg text-[24px] font-bold text-primary tracking-tight cursor-pointer"
-            onClick={() => navigate('/')}
-          >
-            Aether IDE
-          </span>
-          <div className="hidden md:flex items-center gap-xl ml-xl">
-            <button 
-              onClick={() => { setActiveView('chat'); pauseAudioScript(); }} 
-              className={`pb-4 mt-4 font-body-md text-body-md cursor-pointer border-b-2 transition-all ${activeView === 'chat' ? 'text-primary font-bold border-primary' : 'text-on-surface-variant font-medium border-transparent hover:text-primary'}`}
-            >
-              Workspace
+      {/* 1. LEFT NAVIGATION PANEL (Apple/Stripe Inspired Sidebar) */}
+      <aside className={`transition-all duration-300 ease-in-out border-r border-gray-200 bg-gray-50 flex flex-col flex-shrink-0 ${isLeftSidebarOpen ? 'w-[280px]' : 'w-0 overflow-hidden border-none'}`}>
+        {/* Workspace Header */}
+        <div className="h-16 flex items-center px-6 shrink-0 mt-2">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center text-white shadow-sm">
+              <span className="material-symbols-outlined text-[18px]">dataset</span>
+            </div>
+            <div>
+              <h1 className="font-semibold text-gray-900 text-[14px]">Workspace</h1>
+              <p className="text-[11px] text-gray-500 font-medium">StudyLM Environment</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Sources List */}
+        <div className="flex-1 overflow-y-auto px-4 py-6 custom-scrollbar">
+          <div className="flex items-center justify-between text-[11px] font-semibold text-gray-500 mb-3 px-2 uppercase tracking-wide">
+            Resources
+            <button className="text-gray-400 hover:text-gray-700 transition-colors">
+              <span className="material-symbols-outlined text-[16px]">add</span>
             </button>
-            <button 
-              onClick={() => { setActiveView('study-guide'); triggerGenerateSummary(); }}
-              className={`pb-4 mt-4 font-body-md text-body-md cursor-pointer border-b-2 transition-all ${activeView === 'study-guide' ? 'text-primary font-bold border-primary' : 'text-on-surface-variant font-medium border-transparent hover:text-primary'}`}
-            >
-              Library
+          </div>
+          
+          <div className="space-y-1">
+            <button className="w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 hover:bg-gray-200/50 text-[13px] text-gray-600 hover:text-gray-900 transition-colors font-medium">
+              <span className="material-symbols-outlined text-[18px] text-gray-400">description</span>
+              <span className="truncate">Reference_Manual.pdf</span>
             </button>
-            <button 
-              onClick={() => setShowAnalyticsModal(true)} 
-              className="text-on-surface-variant font-medium hover:text-primary transition-colors pb-4 mt-4 font-body-md text-body-md cursor-pointer"
-            >
-              Analytics
+            <button className="w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 hover:bg-gray-200/50 text-[13px] text-gray-600 hover:text-gray-900 transition-colors font-medium">
+              <span className="material-symbols-outlined text-[18px] text-gray-400">play_circle</span>
+              <span className="truncate">Lecture Recording</span>
             </button>
-            <button 
-              onClick={() => setShowSettingsModal(true)} 
-              className="text-on-surface-variant font-medium hover:text-primary transition-colors pb-4 mt-4 font-body-md text-body-md cursor-pointer"
-            >
-              Settings
+            <button className="w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 bg-white shadow-sm border border-gray-200 text-[13px] text-gray-900 transition-colors font-semibold">
+              <span className="material-symbols-outlined text-[18px] text-blue-500">article</span>
+              <span className="truncate">Active Knowledge Base</span>
             </button>
           </div>
         </div>
         
-        {/* Upgrade & Right-side action icons */}
-        <div className="flex items-center gap-md">
-          {/* Notebook picker inline */}
-          <div className="hidden sm:flex items-center gap-1.5 bg-slate-50 border border-outline-variant px-2 py-1 rounded text-body-sm font-semibold">
-            <span className="material-symbols-outlined text-[16px] text-on-surface-variant">folder_open</span>
-            <select 
-              value={activeNotebookId} 
-              onChange={(e) => {
-                setActiveNotebookId(e.target.value);
-                setActiveView('chat');
-                pauseAudioScript();
-              }}
-              className="bg-transparent border-none outline-none text-on-surface cursor-pointer py-0.5"
-            >
-              {notebooks.map(n => (
-                <option key={n.id} value={n.id}>{n.name}</option>
-              ))}
-            </select>
-          </div>
-
-          <button 
-            onClick={() => handleCreateNotebook()}
-            className="bg-primary text-on-primary px-md py-sm rounded font-bold text-label-md hover:opacity-90 transition-opacity cursor-pointer shadow-sm shadow-primary/10"
-          >
-            Upgrade Pro
+        {/* User Footer */}
+        <div className="p-4 shrink-0">
+          <button onClick={() => setView('landing')} className="w-full flex items-center gap-2 px-3 py-2 text-[13px] font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-200/50 rounded-lg transition-colors">
+            <span className="material-symbols-outlined text-[18px]">logout</span>
+            Sign Out
           </button>
-          <div className="flex items-center gap-md">
-            <span 
-              onClick={() => alert("No new notifications")} 
-              className="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary text-[22px]"
-            >
-              notifications
-            </span>
-            <span 
-              onClick={() => { setActiveView('study-guide'); triggerGenerateSummary(); }} 
-              className="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary text-[22px]"
-              data-weight="fill"
-            >
-              auto_awesome
-            </span>
-            <span 
-              onClick={() => setShowSettingsModal(true)} 
-              className="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary text-[22px]"
-            >
-              account_circle
-            </span>
-          </div>
         </div>
-      </header>
+      </aside>
 
-      {/* ── MAIN WORKSPACE BODY ── */}
-      <div className="flex-grow flex relative overflow-hidden bg-white">
+      {/* 2. MAIN WORKSPACE */}
+      <main className="flex-1 flex flex-col min-w-0 bg-white relative shadow-[0_0_40px_-15px_rgba(0,0,0,0.05)] z-10 border-x border-gray-200">
         
-        {/* ══ COLUMN 1: LEFT SIDEBAR (SOURCES & FILES) ══ */}
-        <aside 
-          className={`h-full border-r border-outline-variant bg-surface-container-low pt-14 flex flex-col z-40 fixed left-0 top-0 transition-all duration-200 shrink-0 ${isLeftPaneCollapsed ? 'w-14' : 'w-[280px]'}`}
-        >
-          {isLeftPaneCollapsed ? (
-            // Collapsed Left Sidebar
-            <div className="flex flex-col items-center py-sm gap-sm flex-grow">
-              <button 
-                onClick={() => setIsLeftPaneCollapsed(false)}
-                className="w-10 h-10 rounded hover:bg-surface-variant flex items-center justify-center text-on-surface-variant cursor-pointer"
-                title="Expand sidepanel"
-              >
-                <span className="material-symbols-outlined text-[20px]">menu</span>
-              </button>
-              <div className="h-[1px] w-6 bg-outline-variant my-xs" />
-              
-              <button 
-                onClick={() => setShowAddSourceModal(true)} 
-                className="w-10 h-10 rounded bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 cursor-pointer"
-                title="Add New Source"
-              >
-                <span className="material-symbols-outlined text-[20px]">add</span>
-              </button>
-              
-              <button 
-                onClick={() => { setActiveView('chat'); setIsLeftPaneCollapsed(false); }} 
-                className="w-10 h-10 rounded hover:bg-surface-variant flex items-center justify-center text-on-surface-variant cursor-pointer"
-                title="Workspace Chat"
-              >
-                <span className="material-symbols-outlined text-[20px]">forum</span>
-              </button>
+        {/* Header */}
+        <header className="h-16 flex items-center justify-between px-6 shrink-0 border-b border-gray-100 bg-white z-20">
+          <div className="flex items-center gap-4">
+            <button onClick={() => setIsLeftSidebarOpen(!isLeftSidebarOpen)} className="text-gray-400 hover:text-gray-700 transition-colors flex items-center p-1 rounded-md hover:bg-gray-50">
+              <span className="material-symbols-outlined text-[20px]">dock_to_right</span>
+            </button>
+            <div className="w-[1px] h-5 bg-gray-200"></div>
+            
+            <h2 className="text-[15px] font-semibold text-gray-800 tracking-tight">
+              {activeNotebook?.title || 'Untitled Project'}
+            </h2>
+          </div>
+          
+          <div className="flex items-center">
+            <button 
+              onClick={() => setIsRightPaneCollapsed(!isRightPaneCollapsed)}
+              className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${!isRightPaneCollapsed ? 'bg-blue-50 text-blue-600' : 'text-gray-400 hover:text-gray-700 hover:bg-gray-50'}`}
+            >
+              <span className="material-symbols-outlined text-[20px]">vertical_split</span>
+            </button>
+          </div>
+        </header>
 
-              <button 
-                onClick={() => { setActiveView('study-guide'); setIsLeftPaneCollapsed(false); triggerGenerateSummary(); }} 
-                className="w-10 h-10 rounded hover:bg-surface-variant flex items-center justify-center text-on-surface-variant cursor-pointer"
-                title="Study Guides"
-              >
-                <span className="material-symbols-outlined text-[20px]">edit_note</span>
-              </button>
+        {/* Content Area */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar relative bg-white pb-32" id="chat-container">
+          
+          {activeNotebook?.chatHistory?.length === 0 ? (
+            <div className="h-full flex flex-col items-center justify-center text-center p-8 max-w-lg mx-auto">
+               <div className="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mb-6 shadow-sm">
+                 <span className="material-symbols-outlined text-gray-400 text-[32px]">neurology</span>
+               </div>
+               <h2 className="text-xl font-semibold text-gray-900 mb-2">How can I assist?</h2>
+               <p className="text-[14px] text-gray-500 mb-8 leading-relaxed">
+                 Type a query below to interact with your sources, generate summaries, or construct study materials.
+               </p>
+               
+               <div className="flex gap-3">
+                 <button className="px-4 py-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-[13px] font-medium text-gray-700 transition-colors shadow-sm flex items-center gap-2">
+                   <span className="material-symbols-outlined text-[18px]">bolt</span>
+                   Summarize
+                 </button>
+                 <button className="px-4 py-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-[13px] font-medium text-gray-700 transition-colors shadow-sm flex items-center gap-2">
+                   <span className="material-symbols-outlined text-[18px]">style</span>
+                   Create Cards
+                 </button>
+               </div>
             </div>
           ) : (
-            // Expanded Left Sidebar
-            <div className="p-md flex flex-col gap-sm overflow-y-auto flex-grow">
-              
-              {/* Header section with collapse controls */}
-              <div className="flex items-center justify-between mb-sm mt-sm">
-                <h2 className="font-bold text-label-sm uppercase tracking-wider text-on-surface-variant/70">Sources</h2>
-                <div className="flex items-center gap-xs">
-                  <button 
-                    onClick={() => setShowAddSourceModal(true)} 
-                    className="flex items-center gap-xs text-primary bg-primary/5 px-sm py-1 rounded border border-primary/20 hover:bg-primary/10 transition-all text-label-sm font-bold cursor-pointer"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">add</span>
-                    New Source
-                  </button>
-                  <button 
-                    onClick={() => setIsLeftPaneCollapsed(true)} 
-                    className="p-1 hover:bg-surface-variant rounded text-on-surface-variant cursor-pointer flex items-center"
-                    title="Collapse Left Sidebar"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">keyboard_double_arrow_left</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Navigation lists */}
-              <nav className="flex flex-col gap-xs">
-                <div 
-                  onClick={() => { setActiveView('chat'); }} 
-                  className={`flex items-center gap-sm p-sm rounded cursor-pointer transition-all duration-150 ${activeView === 'chat' ? 'bg-primary text-white font-bold' : 'text-on-surface-variant hover:bg-surface-variant'}`}
-                >
-                  <span className="material-symbols-outlined text-[20px]">folder_open</span>
-                  <span className="truncate">Sources</span>
-                </div>
-                <div 
-                  onClick={() => { setActiveView('chat'); }} 
-                  className={`flex items-center gap-sm p-sm rounded text-on-surface-variant hover:bg-surface-variant cursor-pointer transition-all duration-150`}
-                >
-                  <span className="material-symbols-outlined text-[20px]">forum</span>
-                  <span className="truncate">Active Chat</span>
-                </div>
-                <div 
-                  onClick={() => { setRightPanelTab('notes'); setActiveView('edit-note'); }} 
-                  className={`flex items-center gap-sm p-sm rounded text-on-surface-variant hover:bg-surface-variant cursor-pointer transition-all duration-150`}
-                >
-                  <span className="material-symbols-outlined text-[20px]">edit_note</span>
-                  <span className="truncate">Drafts</span>
-                </div>
-                <div 
-                  onClick={() => { generateStudioMaterial('Reports'); }} 
-                  className={`flex items-center gap-sm p-sm rounded text-on-surface-variant hover:bg-surface-variant cursor-pointer transition-all duration-150`}
-                >
-                  <span className="material-symbols-outlined text-[20px]">format_quote</span>
-                  <span className="truncate">Citations</span>
-                </div>
-                <div 
-                  onClick={() => { setRightPanelTab('flashcards'); }} 
-                  className={`flex items-center gap-sm p-sm rounded text-on-surface-variant hover:bg-surface-variant cursor-pointer transition-all duration-150`}
-                >
-                  <span className="material-symbols-outlined text-[20px]">quiz</span>
-                  <span className="truncate">Flashcards</span>
-                </div>
-              </nav>
-
-              {/* Ingestion status spinner */}
-              {parsingStatus && (
-                <div className="text-[11px] text-amber-600 bg-amber-50 border border-amber-200/50 p-2.5 rounded flex items-center gap-2 font-mono">
-                  <span className="material-symbols-outlined text-[14px] animate-spin">refresh</span>
-                  {parsingStatus}
-                </div>
-              )}
-
-              {/* Web search source form */}
-              <form onSubmit={handleSearchWeb} className="flex gap-2 bg-white border border-outline-variant p-1.5 rounded focus-within:border-primary transition-all mt-sm">
-                <input 
-                  type="text" 
-                  value={webSearchQuery}
-                  onChange={(e) => setWebSearchQuery(e.target.value)}
-                  placeholder="Search web sources..."
-                  className="flex-grow bg-transparent border-none outline-none text-body-sm py-1 px-1.5"
-                />
-                <button type="submit" className="bg-primary/10 hover:bg-primary/25 text-primary p-1 rounded transition-all flex items-center justify-center cursor-pointer">
-                  <span className="material-symbols-outlined text-[16px]">search</span>
-                </button>
-              </form>
-
-              {/* Recent Documents Section */}
-              <div className="mt-md border-t border-outline-variant pt-md">
-                <div className="text-label-sm font-bold text-on-surface-variant/70 mb-sm px-sm uppercase tracking-wider">Recent Documents</div>
-                <div className="space-y-1 max-h-56 overflow-y-auto">
-                  {activeNotebook.sources.map(src => (
-                    <div 
-                      key={src.id}
-                      className="group flex items-center justify-between p-sm rounded hover:bg-surface-variant transition-colors cursor-pointer"
-                      onClick={() => {
-                        handleToggleSource(src.id);
-                        alert(`${src.active ? 'Disabled' : 'Enabled'} source context: "${src.name}"`);
-                      }}
-                    >
-                      <div className="flex items-center gap-sm min-w-0 flex-grow">
-                        <span className={`material-symbols-outlined text-on-surface-variant text-[20px] shrink-0 ${src.active ? 'text-primary' : ''}`}>
-                          {src.type === 'pdf' ? 'description' : src.type === 'video' ? 'movie' : 'terminal'}
-                        </span>
-                        <div className="flex-grow min-w-0">
-                          <p className={`truncate text-body-md font-medium ${src.active ? 'text-primary font-semibold' : 'text-on-surface'}`}>{src.name}</p>
-                          <p className="text-[11px] text-on-surface-variant/60">{src.size}</p>
-                        </div>
-                      </div>
-                      <span 
-                        onClick={(e) => { e.stopPropagation(); handleDeleteSource(src.id); }}
-                        className="material-symbols-outlined text-[16px] text-on-surface-variant/40 hover:text-red-500 opacity-0 group-hover:opacity-100 p-0.5 rounded cursor-pointer"
-                        title="Delete source"
-                      >
-                        delete
-                      </span>
+            <div className="max-w-3xl mx-auto w-full px-6 py-8 space-y-8">
+              {activeNotebook?.chatHistory?.map((msg, i) => (
+                <div key={i} className={`flex w-full animate-fade-up ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`} style={{ animationDelay: `${i * 0.02}s` }}>
+                  
+                  {msg.sender === 'user' ? (
+                    <div className="max-w-[75%] bg-gray-900 px-5 py-3.5 rounded-2xl rounded-tr-sm shadow-sm">
+                      <p className="text-[14px] text-white font-medium leading-relaxed">{msg.text}</p>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Sidebar Footer storage capacity meter */}
-              <div className="mt-auto border-t border-outline-variant pt-md">
-                <div className="mb-md">
-                  <div className="flex justify-between text-[11px] font-bold text-on-surface-variant/70 mb-1">
-                    <span>STORAGE USED</span>
-                    <span>85%</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
-                    <div className="h-full bg-primary w-[85%]"></div>
-                  </div>
-                </div>
-                
-                <div className="flex flex-col gap-sm">
-                  <div 
-                    onClick={() => alert("StudyLM Socratic AI Workspace. Drag & Drop PDF slides to study concepts.")}
-                    className="flex items-center gap-sm text-body-sm font-medium text-on-surface-variant hover:text-primary cursor-pointer transition-all"
-                  >
-                    <span className="material-symbols-outlined text-[20px]">help_outline</span>
-                    Help
-                  </div>
-                  <div 
-                    onClick={() => alert("Send study questions or feature requests to contact@studylm.com")}
-                    className="flex items-center gap-sm text-body-sm font-medium text-on-surface-variant hover:text-primary cursor-pointer transition-all"
-                  >
-                    <span className="material-symbols-outlined text-[20px]">chat_bubble_outline</span>
-                    Feedback
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          )}
-        </aside>
-
-        {/* ══ COLUMN 2: CENTER WORKSPACE AREA ══ */}
-        <main 
-          className="pt-14 h-screen flex flex-col relative overflow-hidden bg-white transition-all duration-200"
-          style={{ 
-            marginLeft: isLeftPaneCollapsed ? '56px' : '280px', 
-            marginRight: isRightPaneCollapsed ? '56px' : '320px' 
-          }}
-        >
-          {/* Header toolbar for other studio views (quizzes, guides, outlines, podcasts) */}
-          {activeView !== 'chat' && (
-            <div className="h-12 border-b border-outline-variant px-md flex justify-between items-center bg-slate-50 shrink-0">
-              <div className="flex items-center gap-sm">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-                <span className="font-bold text-label-md text-on-surface">
-                  {activeView === 'study-guide' && 'Study Guide Outline'}
-                  {activeView === 'quiz' && 'Recall Practice Quiz'}
-                  {activeView === 'audio-overview' && 'Hosts Audio Podcast'}
-                  {activeView === 'outline' && outlineTitle}
-                  {activeView === 'edit-note' && 'Saved Note Editor'}
-                </span>
-              </div>
-              <button 
-                onClick={() => { setActiveView('chat'); pauseAudioScript(); }}
-                className="text-label-sm font-bold text-primary hover:underline flex items-center gap-xs cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-[16px]">arrow_back</span>
-                Back to Workspace Chat
-              </button>
-            </div>
-          )}
-
-          {/* Active Viewport content panel */}
-          <div className="flex-grow overflow-y-auto px-xl py-xl flex flex-col gap-xl pb-28">
-            
-            {/* VIEW 1: Socratic Chat Area */}
-            {activeView === 'chat' && (
-              <div className="flex flex-col gap-lg">
-                {activeNotebook.chatHistory.map((msg, idx) => (
-                  <div key={idx}>
-                    {msg.sender === 'user' ? (
-                      // User message structure
-                      <div className="flex justify-end">
-                        <div className="max-w-[80%] bg-surface-container-low p-md rounded-xl rounded-tr-none border border-outline-variant shadow-sm">
-                          <p className="text-body-md text-on-surface leading-relaxed">{msg.text}</p>
-                        </div>
-                      </div>
-                    ) : (
-                      // AI message structure
-                      <div className="flex justify-start gap-md">
-                        {/* Auto_awesome icon box */}
-                        <div className="w-8 h-8 rounded bg-primary flex items-center justify-center shrink-0">
-                          <span className="material-symbols-outlined text-white text-[20px]" data-weight="fill">auto_awesome</span>
-                        </div>
-                        {/* Bubble containing text, math formulation, code block, citations */}
-                        <div className="max-w-[85%] flex flex-col gap-md">
-                          <div className="bg-white border border-outline-variant p-lg rounded-xl rounded-tl-none ai-glow">
-                            <MarkdownRenderer content={msg.text} />
-                            
-                            {/* Injected citations list */}
-                            {activeNotebook.sources.filter(s => s.active).length > 0 && (
-                              <div className="flex flex-wrap gap-sm mt-md">
-                                {activeNotebook.sources.filter(s => s.active).map((src, sIdx) => (
-                                  <div 
-                                    key={sIdx}
-                                    className="flex items-center gap-xs bg-surface-container-low px-sm py-1 rounded border border-outline-variant text-[11px] font-bold text-primary cursor-pointer hover:bg-primary/5 transition-colors"
-                                    onClick={() => alert(`Sourced from ingested file: "${src.name}"`)}
-                                  >
-                                    <span className="material-symbols-outlined text-[14px]">link</span>
-                                    Citation: {src.name}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Quick Actions for AI response */}
-                          <div className="flex gap-sm">
-                            <button 
-                              onClick={() => handleCopyText(msg.text)}
-                              className="p-xs hover:bg-surface-variant rounded transition-colors cursor-pointer" 
-                              title="Copy response"
-                            >
-                              <span className="material-symbols-outlined text-[20px] text-on-surface-variant">content_copy</span>
-                            </button>
-                            <button 
-                              onClick={handleRegenerateLastChat}
-                              className="p-xs hover:bg-surface-variant rounded transition-colors cursor-pointer" 
-                              title="Regenerate"
-                            >
-                              <span className="material-symbols-outlined text-[20px] text-on-surface-variant">refresh</span>
-                            </button>
-                            <button 
-                              onClick={() => handleAddTextToNote(msg.text)}
-                              className="p-xs hover:bg-surface-variant rounded transition-colors cursor-pointer" 
-                              title="Add response to notes"
-                            >
-                              <span className="material-symbols-outlined text-[20px] text-on-surface-variant">note_add</span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-                {isSocraticTyping && (
-                  <div className="flex justify-start gap-md">
-                    <div className="w-8 h-8 rounded bg-primary flex items-center justify-center shrink-0">
-                      <span className="material-symbols-outlined text-white text-[20px]" data-weight="fill">auto_awesome</span>
-                    </div>
-                    <div className="bg-white border border-outline-variant p-md rounded-xl rounded-tl-none ai-glow flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce" style={{ animationDelay: '300ms' }} />
-                    </div>
-                  </div>
-                )}
-                
-                <div ref={chatBottomRef} />
-              </div>
-            )}
-
-            {/* VIEW 2: Study Guide Summary outline */}
-            {activeView === 'study-guide' && (
-              <div className="max-w-2xl mx-auto flex flex-col gap-6">
-                <div className="flex justify-between items-center bg-surface-container-low p-md border border-outline-variant rounded-lg">
-                  <span className="text-body-sm font-semibold text-on-surface-variant/80">Deep study guide compiled from sources.</span>
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={triggerGenerateSummary} 
-                      className="bg-primary text-on-primary px-3 py-1.5 rounded font-bold text-label-sm hover:opacity-90 cursor-pointer"
-                      disabled={isLoadingSummary}
-                    >
-                      {isLoadingSummary ? "Generating..." : "🔄 Re-generate"}
-                    </button>
-                    {activeNotebook.summaryData && (
-                      <button 
-                        onClick={() => handleSaveToNotes("Study Guide Summary", activeNotebook.summaryData)}
-                        className="bg-white border border-outline text-on-surface px-3 py-1.5 rounded font-bold text-label-sm hover:bg-surface-variant cursor-pointer"
-                      >
-                        Save to Notes
-                      </button>
-                    )}
-                  </div>
-                </div>
-                <div className="bg-white border border-outline-variant p-lg rounded-xl ai-glow">
-                  {isLoadingSummary ? (
-                    <div className="space-y-4">
-                      <div className="h-4 bg-surface-variant rounded w-3/4 animate-pulse" />
-                      <div className="h-4 bg-surface-variant rounded w-full animate-pulse" />
-                      <div className="h-4 bg-surface-variant rounded w-5/6 animate-pulse" />
-                    </div>
-                  ) : activeNotebook.summaryData ? (
-                    <MarkdownRenderer content={activeNotebook.summaryData} />
                   ) : (
-                    <p className="text-center text-on-surface-variant py-8">Click re-generate to parse summaries.</p>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* VIEW 3: Recall Quiz */}
-            {activeView === 'quiz' && (
-              <div className="max-w-2xl mx-auto flex flex-col gap-md">
-                <div className="flex justify-between items-center bg-surface-container-low p-md border border-outline-variant rounded-lg">
-                  <span className="text-body-sm font-bold text-on-surface-variant">Active recall quiz practice.</span>
-                  <button 
-                    onClick={triggerGenerateQuiz}
-                    className="bg-primary text-on-primary px-3 py-1.5 rounded font-bold text-label-sm hover:opacity-90 cursor-pointer"
-                    disabled={isLoadingQuiz}
-                  >
-                    {isLoadingQuiz ? "Drafting..." : "🔄 Re-generate Quiz"}
-                  </button>
-                </div>
-
-                {isLoadingQuiz ? (
-                  <div className="bg-white border border-outline-variant p-8 rounded-xl text-center flex flex-col items-center gap-2">
-                    <span className="material-symbols-outlined text-[32px] text-primary animate-spin">refresh</span>
-                    <p className="text-body-md font-bold text-on-surface-variant">Compiling recall questions...</p>
-                  </div>
-                ) : activeNotebook.quizQuestions.length > 0 ? (
-                  <div className="bg-white border border-outline-variant p-lg rounded-xl ai-glow flex flex-col gap-lg">
-                    <div>
-                      <div className="flex justify-between text-label-sm font-bold text-on-surface-variant mb-1.5">
-                        <span>QUESTION {currentQuestionIdx + 1} OF {activeNotebook.quizQuestions.length}</span>
-                        <span>SCORE: {Object.keys(submittedAnswers).filter(idx => activeNotebook.quizQuestions[idx]?.answerIndex === selectedAnswers[idx]).length} / {Object.keys(submittedAnswers).length}</span>
+                    <div className="w-full max-w-[85%] flex gap-4 group">
+                      {/* Avatar */}
+                      <div className="w-8 h-8 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 mt-1">
+                        <span className="material-symbols-outlined text-blue-600 text-[16px]">neurology</span>
                       </div>
-                      <div className="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-primary transition-all duration-300"
-                          style={{ width: `${((currentQuestionIdx + 1) / activeNotebook.quizQuestions.length) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    <h3 className="font-bold text-headline-sm text-on-surface">
-                      {activeNotebook.quizQuestions[currentQuestionIdx]?.question}
-                    </h3>
-
-                    <div className="flex flex-col gap-sm">
-                      {activeNotebook.quizQuestions[currentQuestionIdx]?.options.map((opt, optIdx) => {
-                        const isSubmitted = submittedAnswers[currentQuestionIdx];
-                        const selectedOpt = selectedAnswers[currentQuestionIdx];
-                        const isSelected = selectedOpt === optIdx;
-                        const isCorrect = activeNotebook.quizQuestions[currentQuestionIdx]?.answerIndex === optIdx;
-
-                        let borderCl = 'border-outline-variant hover:bg-surface-variant';
-                        let bgCl = 'bg-white';
-                        let textCl = 'text-on-surface';
-
-                        if (isSelected) {
-                          borderCl = 'border-primary';
-                          bgCl = 'bg-primary/5';
-                        }
-                        if (isSubmitted) {
-                          if (isCorrect) {
-                            borderCl = 'border-emerald-500';
-                            bgCl = 'bg-emerald-50';
-                            textCl = 'text-emerald-800 font-semibold';
-                          } else if (isSelected) {
-                            borderCl = 'border-red-500';
-                            bgCl = 'bg-red-50';
-                            textCl = 'text-red-800 font-semibold';
-                          }
-                        }
-
-                        return (
-                          <button
-                            key={optIdx}
-                            onClick={() => {
-                              if (isSubmitted) return;
-                              setSelectedAnswers(prev => ({ ...prev, [currentQuestionIdx]: optIdx }));
-                            }}
-                            className={`w-full text-left p-md border rounded-xl flex items-center gap-md text-body-md transition-all cursor-pointer ${borderCl} ${bgCl} ${textCl}`}
-                            disabled={isSubmitted}
-                          >
-                            <span className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${isSelected ? 'bg-primary text-white' : 'bg-surface-variant text-on-surface-variant'}`}>
-                              {String.fromCharCode(65 + optIdx)}
-                            </span>
-                            <span>{opt}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    {submittedAnswers[currentQuestionIdx] && (
-                      <div className="bg-surface-container-low p-md border border-outline-variant rounded">
-                        <p className="text-body-sm leading-relaxed">{activeNotebook.quizQuestions[currentQuestionIdx]?.explanation}</p>
-                      </div>
-                    )}
-
-                    <div className="flex justify-between items-center border-t border-outline-variant pt-md">
-                      <button 
-                        onClick={() => setCurrentQuestionIdx(prev => prev - 1)}
-                        disabled={currentQuestionIdx === 0}
-                        className="bg-white border border-outline text-on-surface px-md py-sm rounded font-bold text-label-md hover:bg-surface-variant cursor-pointer disabled:opacity-50"
-                      >
-                        Previous
-                      </button>
                       
-                      {!submittedAnswers[currentQuestionIdx] && selectedAnswers[currentQuestionIdx] !== undefined && (
-                        <button 
-                          onClick={() => setSubmittedAnswers(prev => ({ ...prev, [currentQuestionIdx]: true }))}
-                          className="bg-primary text-on-primary px-lg py-sm rounded font-bold text-label-md hover:opacity-90 cursor-pointer"
-                        >
-                          Submit Answer
-                        </button>
-                      )}
-
-                      <button 
-                        onClick={() => setCurrentQuestionIdx(prev => prev + 1)}
-                        disabled={currentQuestionIdx === activeNotebook.quizQuestions.length - 1}
-                        className="bg-white border border-outline text-on-surface px-md py-sm rounded font-bold text-label-md hover:bg-surface-variant cursor-pointer disabled:opacity-50"
-                      >
-                        Next
-                      </button>
-                    </div>
-
-                  </div>
-                ) : (
-                  <p className="text-center text-on-surface-variant py-8">Click re-generate to parse quiz questions.</p>
-                )}
-              </div>
-            )}
-
-            {/* VIEW 4: Audio Podcast overview */}
-            {activeView === 'audio-overview' && (
-              <div className="max-w-2xl mx-auto flex flex-col gap-lg">
-                <div className="flex justify-between items-center bg-surface-container-low p-md border border-outline-variant rounded-lg">
-                  <span className="text-body-sm font-semibold text-on-surface-variant">Aria & Liam Podcast overview co-hosts.</span>
-                  <button 
-                    onClick={triggerGenerateAudio}
-                    className="bg-primary text-on-primary px-3 py-1.5 rounded font-bold text-label-sm hover:opacity-90 cursor-pointer"
-                    disabled={isLoadingAudio}
-                  >
-                    {isLoadingAudio ? "Writing..." : "🔄 Re-generate Podcast"}
-                  </button>
-                </div>
-
-                {isLoadingAudio ? (
-                  <div className="bg-white border border-outline-variant p-8 rounded-xl text-center flex flex-col items-center gap-2">
-                    <span className="material-symbols-outlined text-[32px] text-primary animate-spin">refresh</span>
-                    <p className="text-body-md font-bold text-on-surface-variant">Drafting banter dialogue script...</p>
-                  </div>
-                ) : activeNotebook.audioScript.length > 0 ? (
-                  <div className="flex flex-col gap-md">
-                    
-                    {/* Visual Player card */}
-                    <div className="bg-white border border-outline-variant p-lg rounded-xl flex flex-col gap-lg ai-glow">
-                      
-                      <div className="flex justify-around items-center">
-                        <div className="flex flex-col items-center gap-sm">
-                          <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white transition-all ${audioIsPlaying && activeNotebook.audioScript[audioActiveLine]?.speaker === 'Aria' ? 'bg-primary scale-110 shadow-lg shadow-primary/25' : 'bg-slate-400'}`}>A</div>
-                          <span className="text-body-sm font-bold text-on-surface">Aria</span>
+                      <div className="flex-1 min-w-0 flex flex-col gap-2 pt-1.5">
+                        <div className="text-gray-800 text-[15px] leading-relaxed">
+                          <MarkdownRenderer content={msg.text} />
                         </div>
                         
-                        <div className="flex items-end gap-1 h-6">
-                          {[4, 8, 3, 6, 9, 2].map((h, i) => (
-                            <span 
-                              key={i} 
-                              className={`w-1 bg-primary/60 rounded-full transition-all duration-300 ${audioIsPlaying ? 'animate-bounce' : 'h-1'}`}
-                              style={{ 
-                                height: audioIsPlaying ? `${h * 2}px` : '3px',
-                                animationDelay: `${i * 100}ms`
-                              }}
-                            />
-                          ))}
-                        </div>
-
-                        <div className="flex flex-col items-center gap-sm">
-                          <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white transition-all ${audioIsPlaying && activeNotebook.audioScript[audioActiveLine]?.speaker === 'Liam' ? 'bg-indigo-600 scale-110 shadow-lg shadow-indigo-600/25' : 'bg-slate-400'}`}>L</div>
-                          <span className="text-body-sm font-bold text-on-surface">Liam</span>
+                        {/* Tools (Hidden until hover) */}
+                        <div className="flex items-center gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <button onClick={() => handleAddTextToNote(msg.text)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-[12px] font-medium text-gray-600 transition-colors shadow-sm">
+                            <span className="material-symbols-outlined text-[14px]">bookmark_add</span> Save Note
+                          </button>
+                          <button className="flex items-center justify-center w-8 h-8 rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-gray-600 transition-colors shadow-sm">
+                            <span className="material-symbols-outlined text-[14px]">content_copy</span>
+                          </button>
                         </div>
                       </div>
-
-                      <div className="bg-slate-50 border border-outline-variant p-md rounded-lg flex flex-col gap-sm">
-                        <div className="flex justify-between items-center">
-                          {audioIsPlaying ? (
-                            <button 
-                              onClick={pauseAudioScript}
-                              className="bg-indigo-600 text-white px-md py-sm rounded-full font-bold text-label-md hover:opacity-90 flex items-center gap-xs cursor-pointer shadow-md shadow-indigo-600/10"
-                            >
-                              <span className="material-symbols-outlined text-[18px]">pause</span>
-                              Pause Podcast
-                            </button>
-                          ) : (
-                            <button 
-                              onClick={() => playAudioScript(audioActiveLine >= 0 ? audioActiveLine : 0)}
-                              className="bg-primary text-on-primary px-md py-sm rounded-full font-bold text-label-md hover:opacity-90 flex items-center gap-xs cursor-pointer shadow-md shadow-primary/10"
-                            >
-                              <span className="material-symbols-outlined text-[18px]">play_arrow</span>
-                              Play Podcast
-                            </button>
-                          )}
-
-                          <select 
-                            value={audioPlaySpeed}
-                            onChange={(e) => {
-                              const speed = parseFloat(e.target.value);
-                              setAudioPlaySpeed(speed);
-                              if (audioIsPlaying) playAudioScript(audioActiveLine);
-                            }}
-                            className="bg-white border border-outline px-sm py-1 rounded text-body-sm cursor-pointer"
-                          >
-                            <option value="0.8">0.8x Speed</option>
-                            <option value="1">1.0x Speed</option>
-                            <option value="1.2">1.2x Speed</option>
-                          </select>
-                        </div>
-
-                        {audioActiveLine >= 0 && (
-                          <div className="flex flex-col gap-1 mt-xs">
-                            <div className="h-1 w-full bg-slate-200 rounded-full overflow-hidden">
-                              <div className="h-full bg-primary" style={{ width: `${((audioActiveLine + 1) / activeNotebook.audioScript.length) * 100}%` }} />
-                            </div>
-                            <span className="text-[10px] text-on-surface-variant font-mono">Segment {audioActiveLine + 1} of {activeNotebook.audioScript.length}</span>
-                          </div>
-                        )}
-                      </div>
-
                     </div>
-
-                    {/* Scrolling dialogue transcript cards */}
-                    <div className="bg-white border border-outline-variant p-md rounded-xl flex flex-col gap-sm max-h-72 overflow-y-auto">
-                      {activeNotebook.audioScript.map((line, idx) => (
-                        <div 
-                          key={idx}
-                          onClick={() => playAudioScript(idx)}
-                          className={`p-sm rounded border transition-all cursor-pointer text-left text-body-md ${audioActiveLine === idx ? 'border-primary bg-primary/[0.02] font-semibold' : 'border-transparent hover:bg-surface-variant'}`}
-                        >
-                          <span className={`font-bold mr-1.5 ${line.speaker === 'Aria' ? 'text-primary' : 'text-indigo-600'}`}>{line.speaker.toUpperCase()}:</span>
-                          <span>{line.text}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                  </div>
-                ) : (
-                  <p className="text-center text-on-surface-variant py-8">Click re-generate to parse podcast overview.</p>
-                )}
-              </div>
-            )}
-
-            {/* VIEW 5: Outline Compilation */}
-            {activeView === 'outline' && (
-              <div className="max-w-2xl mx-auto flex flex-col gap-lg">
-                <div className="flex justify-between items-center bg-slate-50 p-md border border-outline-variant rounded-lg">
-                  <span className="text-body-sm font-bold text-primary">{outlineTitle}</span>
-                  {outlineContent && (
-                    <button 
-                      onClick={() => handleSaveToNotes(outlineTitle, outlineContent)}
-                      className="bg-primary text-on-primary px-3 py-1.5 rounded font-bold text-label-sm hover:opacity-90 cursor-pointer"
-                    >
-                      💾 Save to Notes
-                    </button>
                   )}
                 </div>
-                <div className="bg-white border border-outline-variant p-lg rounded-xl ai-glow">
-                  {isLoadingOutline ? (
-                    <div className="space-y-4">
-                      <div className="h-4 bg-surface-variant rounded w-4/5 animate-pulse" />
-                      <div className="h-4 bg-surface-variant rounded w-full animate-pulse" />
-                    </div>
-                  ) : outlineContent ? (
-                    <MarkdownRenderer content={outlineContent} />
-                  ) : (
-                    <p className="text-center text-on-surface-variant py-8">No content compiled.</p>
-                  )}
-                </div>
-              </div>
-            )}
+              ))}
+            </div>
+          )}
+        </div>
 
-            {/* VIEW 6: Full Saved Note Editor (fallback viewport) */}
-            {activeView === 'edit-note' && (
-              <div className="max-w-2xl mx-auto bg-white border border-outline-variant p-lg rounded-xl flex flex-col gap-md shadow-sm">
-                {activeNotebook.notes.find(n => n.id === activeNoteId) ? (
-                  <div className="flex flex-col gap-md">
-                    <input 
-                      type="text" 
-                      value={activeNotebook.notes.find(n => n.id === activeNoteId).title}
-                      onChange={(e) => handleUpdateNoteTitle(e.target.value)}
-                      placeholder="Note Title..."
-                      className="w-full text-headline-sm font-bold border-b border-outline-variant pb-xs focus:border-primary outline-none"
-                    />
-                    <textarea 
-                      value={activeNotebook.notes.find(n => n.id === activeNoteId).content}
-                      onChange={(e) => handleUpdateNoteContent(e.target.value)}
-                      placeholder="Start drafting notes here..."
-                      className="w-full min-h-[320px] text-body-md leading-relaxed border-none outline-none resize-none p-0"
-                    />
-                    <div className="flex justify-between items-center border-t border-outline-variant pt-md">
-                      <button 
-                        onClick={() => handleDeleteNote(activeNoteId)}
-                        className="text-red-500 hover:bg-red-50 px-md py-sm rounded font-bold text-label-md cursor-pointer"
-                      >
-                        Delete Note
-                      </button>
-                      <button 
-                        onClick={() => { setActiveView('chat'); setActiveNoteId(null); }}
-                        className="bg-primary text-on-primary px-lg py-sm rounded font-bold text-label-md hover:opacity-90 cursor-pointer"
-                      >
-                        Save & Close
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <p className="text-center text-on-surface-variant py-8">Select a note or click Add Note in My Notes tab.</p>
-                )}
-              </div>
-            )}
-
-          </div>
-
-          {/* Floating bottom input bar (Exactly matching mockup card layout) */}
-          <div className="absolute bottom-0 left-0 w-full px-xl pb-xl bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none">
-            <div className="max-w-4xl mx-auto mesh-gradient-border rounded p-2 flex items-end gap-sm shadow-lg pointer-events-auto bg-white/95 backdrop-blur">
-              <button 
-                onClick={() => setShowAddSourceModal(true)} 
-                className="p-sm hover:bg-surface-variant rounded transition-colors text-on-surface-variant cursor-pointer flex items-center justify-center shrink-0"
-                title="Attach source file"
-              >
-                <span className="material-symbols-outlined">attach_file</span>
-              </button>
-              
-              <textarea 
-                value={socraticInput}
-                onChange={(e) => setSocraticInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSocraticSend(e);
-                  }
-                }}
-                className="flex-grow bg-transparent border-none focus:ring-0 text-body-md py-2 px-2 resize-none max-h-48 overflow-y-auto text-on-surface outline-none"
-                placeholder="Ask Aether anything about your sources..." 
-                rows="1"
-              />
-
-              <div className="flex items-center gap-sm pb-1 shrink-0">
-                <button 
-                  onClick={() => alert("Speech recognition currently in development!")} 
-                  className="p-sm hover:bg-surface-variant rounded transition-colors text-on-surface-variant cursor-pointer flex items-center justify-center"
-                  title="Voice input"
-                >
-                  <span className="material-symbols-outlined">mic</span>
+        {/* Input Bar */}
+        <div className="absolute bottom-0 w-full bg-gradient-to-t from-white via-white to-transparent pt-10 pb-6 px-6 z-30 pointer-events-none">
+          <div className="max-w-3xl mx-auto pointer-events-auto">
+            <div className="bg-white border border-gray-200 rounded-xl shadow-sm focus-within:border-gray-300 focus-within:shadow-md transition-all">
+              <div className="flex items-end px-3 py-3 gap-2">
+                <button className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors shrink-0">
+                  <span className="material-symbols-outlined text-[20px]">add</span>
                 </button>
+                
+                <textarea
+                  value={socraticInput}
+                  onChange={(e) => setSocraticInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSocraticSend();
+                    }
+                  }}
+                  placeholder="Ask a question or type '/' for commands..."
+                  className="flex-1 bg-transparent border-none text-[15px] text-gray-800 placeholder:text-gray-400 p-2 outline-none font-medium resize-none min-h-[40px] max-h-[200px]"
+                  rows={1}
+                />
+                
                 <button 
                   onClick={handleSocraticSend}
-                  className="bg-primary text-white p-sm rounded hover:opacity-90 transition-opacity flex items-center justify-center cursor-pointer shadow-sm shadow-primary/20"
-                  title="Send message"
+                  disabled={!socraticInput.trim()}
+                  className={`w-9 h-9 flex items-center justify-center rounded-lg shrink-0 transition-all ${socraticInput.trim() ? 'bg-gray-900 text-white hover:bg-gray-800 shadow-sm' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
                 >
-                  <span className="material-symbols-outlined" data-weight="fill">send</span>
+                  <span className="material-symbols-outlined text-[18px]">arrow_upward</span>
                 </button>
               </div>
+            </div>
+            <div className="text-center mt-3 text-[11px] text-gray-400 font-medium">
+              Responses are generated by AI and may be inaccurate.
             </div>
           </div>
+        </div>
+      </main>
 
-        </main>
+      {/* 3. RIGHT DETAIL PANEL */}
+      <aside className={`transition-all duration-300 ease-in-out border-l border-gray-200 bg-gray-50 flex flex-col flex-shrink-0 z-20 ${!isRightPaneCollapsed ? 'w-[340px]' : 'w-0 overflow-hidden border-none'}`}>
+        
+        {/* Tabs */}
+        <div className="h-16 flex items-center px-4 shrink-0 border-b border-gray-200/60 bg-gray-50">
+          <div className="flex bg-gray-200/50 rounded-lg p-1 w-full border border-gray-200/50">
+            <button
+              onClick={() => setRightPanelTab('notes')}
+              className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-[12px] font-semibold rounded-md transition-all ${rightPanelTab === 'notes' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              Notes
+            </button>
+            <button
+              onClick={() => setRightPanelTab('flashcards')}
+              className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-[12px] font-semibold rounded-md transition-all ${rightPanelTab === 'flashcards' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              Flashcards
+            </button>
+          </div>
+        </div>
 
-        {/* ══ COLUMN 3: RIGHT SIDEBAR (NOTES & FLASHCARDS TAB) ══ */}
-        <aside 
-          className={`h-screen border-l border-outline-variant bg-surface-container-low pt-14 flex flex-col z-40 fixed right-0 top-0 transition-all duration-200 shrink-0 ${isRightPaneCollapsed ? 'w-14' : 'w-[320px]'}`}
-        >
-          {isRightPaneCollapsed ? (
-            // Collapsed Right Sidebar
-            <div className="flex flex-col items-center py-sm gap-sm flex-grow">
-              <button 
-                onClick={() => setIsRightPaneCollapsed(false)}
-                className="w-10 h-10 rounded hover:bg-surface-variant flex items-center justify-center text-on-surface-variant cursor-pointer"
-                title="Expand sidepanel"
-              >
-                <span className="material-symbols-outlined text-[20px]">menu_open</span>
-              </button>
-              <div className="h-[1px] w-6 bg-outline-variant my-xs" />
-              
-              <button 
-                onClick={() => { setRightPanelTab('notes'); setIsRightPaneCollapsed(false); }}
-                className={`w-10 h-10 rounded flex items-center justify-center cursor-pointer ${rightPanelTab === 'notes' ? 'bg-primary/10 text-primary' : 'text-on-surface-variant hover:bg-surface-variant'}`}
-                title="Study Notes"
-              >
-                <span className="material-symbols-outlined text-[20px]">edit</span>
-              </button>
-
-              <button 
-                onClick={() => { setRightPanelTab('flashcards'); setIsRightPaneCollapsed(false); triggerGenerateCards(); }}
-                className={`w-10 h-10 rounded flex items-center justify-center cursor-pointer ${rightPanelTab === 'flashcards' ? 'bg-primary/10 text-primary' : 'text-on-surface-variant hover:bg-surface-variant'}`}
-                title="Flashcards Study"
-              >
-                <span className="material-symbols-outlined text-[20px]">quiz</span>
-              </button>
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
+          
+          {rightPanelTab === 'notes' && (
+            <div className="h-full flex flex-col p-6">
+               <textarea 
+                  className="flex-1 w-full bg-transparent border-none outline-none resize-none text-[14px] text-gray-700 placeholder:text-gray-400 leading-relaxed font-medium"
+                  placeholder="Capture key insights here..."
+                  value={activeNotebook?.notes?.find(n => n.id === activeNoteId)?.content || ''}
+                  onChange={(e) => handleUpdateNoteContent(e.target.value)}
+               />
             </div>
-          ) : (
-            // Expanded Right Sidebar (Exactly matching Notes / Flashcards layout in mockup)
-            <div className="flex flex-col h-full overflow-hidden">
+          )}
+
+          {rightPanelTab === 'flashcards' && (
+            <div className="p-6 space-y-4">
+              <button className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-900 py-2.5 rounded-lg text-[13px] font-semibold shadow-sm transition-colors">
+                <span className="material-symbols-outlined text-[18px]">sync</span>
+                Generate Cards
+              </button>
               
-              {/* Sidebar Tabs switcher */}
-              <div className="flex border-b border-outline-variant bg-white relative pr-8 shrink-0">
-                <button 
-                  onClick={() => setRightPanelTab('notes')}
-                  className={`flex-grow py-md text-label-sm font-bold text-center border-b-2 cursor-pointer transition-colors ${rightPanelTab === 'notes' ? 'text-primary border-primary' : 'text-on-surface-variant/60 hover:text-on-surface border-transparent'}`}
-                >
-                  Notes
-                </button>
-                <button 
-                  onClick={() => { setRightPanelTab('flashcards'); triggerGenerateCards(); }}
-                  className={`flex-grow py-md text-label-sm font-bold text-center border-b-2 cursor-pointer transition-colors ${rightPanelTab === 'flashcards' ? 'text-primary border-primary' : 'text-on-surface-variant/60 hover:text-on-surface border-transparent'}`}
-                >
-                  Flashcards
-                </button>
-                
-                <button 
-                  onClick={() => setIsRightPaneCollapsed(true)} 
-                  className="absolute right-1 top-2.5 p-1 hover:bg-surface-variant rounded text-on-surface-variant cursor-pointer flex items-center"
-                  title="Collapse Right Sidebar"
-                >
-                  <span className="material-symbols-outlined text-[18px]">keyboard_double_arrow_right</span>
-                </button>
-              </div>
-
-              {/* Sidebar Content body */}
-              <div className="flex-grow flex flex-col overflow-hidden bg-white">
-                
-                {/* ── NOTES PANEL VIEW ── */}
-                {rightPanelTab === 'notes' && (
-                  <div className="flex flex-col h-full overflow-hidden justify-between">
-                    <div className="flex-grow flex flex-col overflow-hidden">
-                      {/* Scratchpad Header */}
-                      <div className="p-md flex justify-between items-center border-b border-outline-variant/50 shrink-0">
-                        <div className="flex items-center gap-sm">
-                          <span className="material-symbols-outlined text-on-surface-variant text-[18px]">edit</span>
-                          
-                          {/* Note select selector inline */}
-                          {activeNotebook.notes.length > 0 ? (
-                            <select 
-                              value={activeNoteId || ''} 
-                              onChange={(e) => setActiveNoteId(e.target.value)}
-                              className="text-label-sm font-bold uppercase tracking-wider text-on-surface-variant/80 bg-transparent border-none outline-none cursor-pointer"
-                            >
-                              {activeNotebook.notes.map(note => (
-                                <option key={note.id} value={note.id}>{note.title}</option>
-                              ))}
-                            </select>
-                          ) : (
-                            <span className="text-label-sm font-bold uppercase tracking-wider text-on-surface-variant/80">Study Notes</span>
-                          )}
-                        </div>
-                        <div className="flex gap-sm">
-                          <span 
-                            onClick={handleAddNewNote}
-                            className="material-symbols-outlined text-[18px] text-on-surface-variant cursor-pointer hover:text-primary"
-                            title="Add new note"
-                          >
-                            add
-                          </span>
-                          <span 
-                            onClick={() => {
-                              if (activeNoteId) alert("Notes are saved automatically in your active workspace!");
-                            }}
-                            className="material-symbols-outlined text-[18px] text-on-surface-variant cursor-pointer hover:text-primary"
-                            title="Save notes"
-                          >
-                            save
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Markdown Editor Textarea area */}
-                      <div className="flex-grow p-lg overflow-y-auto flex flex-col">
-                        {activeNoteId && activeNotebook.notes.find(n => n.id === activeNoteId) ? (
-                          <div className="flex flex-col h-full">
-                            <textarea 
-                              value={activeNotebook.notes.find(n => n.id === activeNoteId).content}
-                              onChange={(e) => handleUpdateNoteContent(e.target.value)}
-                              className="w-full h-40 bg-transparent border-none focus:ring-0 text-body-md leading-relaxed text-on-surface p-0 placeholder-on-surface-variant/30 resize-none outline-none shrink-0" 
-                              placeholder="Start drafting your notes here..."
-                            />
-                            
-                            {/* Key Concepts Preview Section */}
-                            <div className="mt-xl border-t border-outline-variant/60 pt-md">
-                              <h3 className="text-headline-sm font-bold text-on-surface mb-md">Key Concepts: Quantum Mechanics</h3>
-                              <ul className="space-y-sm list-none text-on-surface-variant">
-                                <li className="flex items-start gap-sm text-body-md">
-                                  <span className="text-primary mt-1 text-xs">•</span>
-                                  <span>Wave-particle duality exists in all matter.</span>
-                                </li>
-                                <li className="flex items-start gap-sm text-body-md">
-                                  <span className="text-primary mt-1 text-xs">•</span>
-                                  <span>The observer effect states measurement alters the system.</span>
-                                </li>
-                                <li className="flex items-start gap-sm text-body-md">
-                                  <span className="text-primary mt-1 text-xs">•</span>
-                                  <span>Collapse occurs when a superposition reduces to an eigenstate.</span>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="text-center py-12 text-on-surface-variant">
-                            No active note. Click "+" above to add study session notes.
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Generate Flashcards bottom button */}
-                    <div className="p-md border-t border-outline-variant bg-white shrink-0">
-                      <button 
-                        onClick={() => { setRightPanelTab('flashcards'); triggerGenerateCards(); }}
-                        className="w-full py-3 bg-primary/10 text-primary rounded font-bold text-label-md flex items-center justify-center gap-sm hover:bg-primary/20 transition-all cursor-pointer shadow-sm shadow-primary/5"
-                      >
-                        <span className="material-symbols-outlined text-[20px]">auto_fix_high</span>
-                        Generate Flashcards
-                      </button>
+              <div className="space-y-4 pt-2">
+                {(activeNotebook?.flashcards || []).map(fc => (
+                  <div key={fc.id} className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                    <span className="text-[11px] font-bold tracking-wider text-gray-400 uppercase block mb-2">Front</span>
+                    <p className="text-[14px] font-medium text-gray-900 mb-4">{fc.q}</p>
+                    
+                    <div className="pt-3 border-t border-gray-100">
+                      <span className="text-[11px] font-bold tracking-wider text-gray-400 uppercase block mb-2">Back</span>
+                      <p className="text-[14px] text-gray-600">{fc.a}</p>
                     </div>
                   </div>
-                )}
-
-                {/* ── FLASHCARDS PANEL VIEW ── */}
-                {rightPanelTab === 'flashcards' && (
-                  <div className="flex flex-col h-full overflow-hidden justify-between p-md bg-slate-50/50">
-                    {isLoadingCards ? (
-                      <div className="flex-grow flex flex-col justify-center items-center gap-2 text-center text-on-surface-variant">
-                        <span className="material-symbols-outlined text-[32px] text-primary animate-spin">refresh</span>
-                        <span className="text-body-sm font-bold">Drafting vocab card decks...</span>
-                      </div>
-                    ) : activeNotebook.flashcards.length > 0 ? (
-                      <div className="flex-grow flex flex-col justify-between py-md">
-                        {/* 3D flipped recall card */}
-                        <div 
-                          onClick={() => setIsFlipped(!isFlipped)}
-                          className="w-full h-56 rounded-xl border border-outline-variant shadow-md bg-white relative cursor-pointer select-none transition-all duration-300 transform hover:shadow-lg active:scale-[0.98] flex flex-col justify-between p-md"
-                        >
-                          <div className="border-b border-outline-variant pb-1 flex justify-between items-center">
-                            <span className="text-[9px] font-bold text-primary tracking-widest font-mono">
-                              {isFlipped ? 'DEFINITION' : 'ACADEMIC TERM'}
-                            </span>
-                            <span className="material-symbols-outlined text-[16px] text-on-surface-variant/40">
-                              {isFlipped ? 'visibility' : 'help'}
-                            </span>
-                          </div>
-
-                          <div className="flex-grow flex items-center justify-center text-center px-xs py-sm">
-                            {isFlipped ? (
-                              <p className="text-body-md text-on-surface leading-normal">{activeNotebook.flashcards[cardIndex]?.a}</p>
-                            ) : (
-                              <h4 className="text-body-lg font-bold text-on-surface">{activeNotebook.flashcards[cardIndex]?.q}</h4>
-                            )}
-                          </div>
-
-                          <div className="text-center text-[10px] font-semibold text-on-surface-variant/50 border-t border-outline-variant/30 pt-1">
-                            [ CLICK CARD TO FLIP ]
-                          </div>
-                        </div>
-
-                        {/* Deck card nav bar */}
-                        <div className="flex items-center justify-center gap-sm mt-md bg-white border border-outline-variant py-1 rounded-full shadow-sm max-w-[160px] mx-auto">
-                          <button 
-                            className="p-1 hover:bg-slate-100 rounded text-on-surface-variant disabled:opacity-40 cursor-pointer"
-                            disabled={cardIndex === 0}
-                            onClick={() => { setCardIndex(prev => prev - 1); setIsFlipped(false); }}
-                          >
-                            <span className="material-symbols-outlined text-[20px]">chevron_left</span>
-                          </button>
-                          <span className="text-body-sm font-bold text-on-surface-variant font-mono">
-                            {cardIndex + 1} / {activeNotebook.flashcards.length}
-                          </span>
-                          <button 
-                            className="p-1 hover:bg-slate-100 rounded text-on-surface-variant disabled:opacity-40 cursor-pointer"
-                            disabled={cardIndex === activeNotebook.flashcards.length - 1}
-                            onClick={() => { setCardIndex(prev => prev + 1); setIsFlipped(false); }}
-                          >
-                            <span className="material-symbols-outlined text-[20px]">chevron_right</span>
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex-grow flex flex-col justify-center items-center text-center p-md text-on-surface-variant gap-sm">
-                        <span className="material-symbols-outlined text-[32px] text-on-surface-variant/30">quiz</span>
-                        <p className="text-body-sm">No cards compiled. Go back to study guides or notes, click "Generate Flashcards" to extract vocabs.</p>
-                      </div>
-                    )}
-
-                    <div className="p-sm bg-white border-t border-outline-variant rounded-t-xl shrink-0">
-                      <button 
-                        onClick={() => setRightPanelTab('notes')}
-                        className="w-full py-2 border border-outline text-on-surface hover:bg-slate-50 rounded font-bold text-label-md flex items-center justify-center gap-xs cursor-pointer"
-                      >
-                        <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-                        Back to Notes
-                      </button>
-                    </div>
-                  </div>
-                )}
-
+                ))}
               </div>
             </div>
           )}
-        </aside>
-
-      </div>
-
-      {/* ── OVERLAY MODAL: INGEST / ADD SOURCES ── */}
-      {showAddSourceModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg border border-outline-variant overflow-hidden flex flex-col animate-scale-in">
-            <div className="flex justify-between items-center px-6 py-4 bg-slate-50 border-b border-outline-variant">
-              <h3 className="font-bold text-headline-sm text-on-surface">Ingest Study Source</h3>
-              <button 
-                className="text-on-surface-variant/60 hover:text-on-surface text-2xl font-bold cursor-pointer" 
-                onClick={() => setShowAddSourceModal(false)}
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="flex border-b border-outline-variant bg-slate-50/50">
-              <button 
-                className={`flex-grow py-3 font-semibold text-body-sm text-center border-b-2 cursor-pointer ${addSourceTab === 'pdf' ? 'text-primary border-primary bg-white' : 'text-on-surface-variant/70 border-transparent hover:bg-slate-100'}`}
-                onClick={() => setAddSourceTab('pdf')}
-              >
-                PDF Document
-              </button>
-              <button 
-                className={`flex-grow py-3 font-semibold text-body-sm text-center border-b-2 cursor-pointer ${addSourceTab === 'video' ? 'text-primary border-primary bg-white' : 'text-on-surface-variant/70 border-transparent hover:bg-slate-100'}`}
-                onClick={() => setAddSourceTab('video')}
-              >
-                Lecture Video Link
-              </button>
-              <button 
-                className={`flex-grow py-3 font-semibold text-body-sm text-center border-b-2 cursor-pointer ${addSourceTab === 'text' ? 'text-primary border-primary bg-white' : 'text-on-surface-variant/70 border-transparent hover:bg-slate-100'}`}
-                onClick={() => setAddSourceTab('text')}
-              >
-                Custom Passages
-              </button>
-            </div>
-
-            <div className="p-6">
-              {addSourceTab === 'pdf' && (
-                <div 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-primary/45 bg-primary/[0.01] hover:bg-primary/[0.03] transition-all rounded-xl p-8 text-center cursor-pointer flex flex-col items-center gap-3"
-                >
-                  <span className="material-symbols-outlined text-[48px] text-primary/70">upload_file</span>
-                  <p className="text-body-md font-bold text-on-surface">Select PDF slides or pass notes</p>
-                  <input 
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handlePdfUpload}
-                    accept="application/pdf"
-                    style={{ display: 'none' }}
-                  />
-                </div>
-              )}
-
-              {addSourceTab === 'video' && (
-                <form onSubmit={handleAddVideoLink} className="flex flex-col gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold text-on-surface-variant/65 uppercase tracking-wider font-mono">Lecture Video URL</label>
-                    <input 
-                      type="url" 
-                      value={videoUrl}
-                      onChange={(e) => setVideoUrl(e.target.value)}
-                      placeholder="Paste YouTube link..."
-                      className="w-full border border-outline px-3.5 py-2.5 rounded-lg text-body-md focus:border-primary outline-none"
-                      required
-                    />
-                  </div>
-                  <button type="submit" className="w-full bg-primary text-white py-2.5 rounded-lg font-bold text-label-md hover:opacity-95 cursor-pointer mt-2 shadow-md shadow-primary/10">
-                    Ingest Video Context
-                  </button>
-                </form>
-              )}
-
-              {addSourceTab === 'text' && (
-                <form onSubmit={handleAddTextSource} className="flex flex-col gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold text-on-surface-variant/65 uppercase tracking-wider font-mono">Source Title</label>
-                    <input 
-                      type="text" 
-                      value={customTextTitle}
-                      onChange={(e) => setCustomTextTitle(e.target.value)}
-                      placeholder="Title of notes..."
-                      className="w-full border border-outline px-3.5 py-2 rounded-lg text-body-md focus:border-primary outline-none"
-                      required
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold text-on-surface-variant/65 uppercase tracking-wider font-mono">Passages</label>
-                    <textarea 
-                      value={customTextContent}
-                      onChange={(e) => setCustomTextContent(e.target.value)}
-                      placeholder="Paste textbook details or slide outlines..."
-                      className="w-full h-32 border border-outline px-3.5 py-2 rounded-lg text-body-md focus:border-primary outline-none resize-none"
-                      required
-                    />
-                  </div>
-                  <button type="submit" className="w-full bg-primary text-white py-2.5 rounded-lg font-bold text-label-md hover:opacity-95 cursor-pointer mt-2 shadow-md shadow-primary/10">
-                    Add Text Source
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
         </div>
-      )}
-
-      {/* ── OVERLAY MODAL: COGNITIVE API KEY SETTINGS ── */}
-      {showSettingsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm border border-outline-variant overflow-hidden animate-scale-in">
-            <div className="flex justify-between items-center px-6 py-4 bg-slate-50 border-b border-outline-variant">
-              <h3 className="font-bold text-headline-sm text-on-surface">Gemini API Key</h3>
-              <button 
-                className="text-on-surface-variant/60 hover:text-on-surface text-2xl font-bold cursor-pointer" 
-                onClick={() => setShowSettingsModal(false)}
-              >
-                ×
-              </button>
-            </div>
-            <div className="p-6 flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-[10px] font-bold uppercase tracking-wider font-mono text-on-surface-variant">API Key Settings</span>
-                  <span className={`text-[9px] font-bold px-2 py-0.5 rounded font-mono ${apiKey ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-600 border border-slate-200'}`}>
-                    {apiKey ? 'REAL AI ACTIVE' : 'SIMULATED DEMO'}
-                  </span>
-                </div>
-                <div className="flex border border-outline rounded-lg bg-white overflow-hidden focus-within:border-primary transition-all">
-                  <input 
-                    type={showApiKey ? "text" : "password"}
-                    value={apiKey}
-                    onChange={handleApiKeyChange}
-                    placeholder="Enter Gemini API Key..."
-                    className="flex-grow px-3 py-2 text-body-md outline-none border-none font-mono"
-                  />
-                  <button 
-                    type="button" 
-                    onClick={() => setShowApiKey(!showApiKey)}
-                    className="px-3 border-l border-outline bg-slate-50 font-mono text-[10px] font-bold text-on-surface-variant cursor-pointer"
-                  >
-                    {showApiKey ? "Hide" : "Show"}
-                  </button>
-                </div>
-              </div>
-              <button 
-                onClick={() => setShowSettingsModal(false)} 
-                className="w-full bg-primary text-white py-2.5 rounded-lg font-bold text-label-md hover:opacity-95 cursor-pointer mt-2"
-              >
-                Apply Settings
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── OVERLAY MODAL: SHARE NOTEBOOK ── */}
-      {showShareModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm border border-outline-variant overflow-hidden animate-scale-in">
-            <div className="flex justify-between items-center px-6 py-4 bg-slate-50 border-b border-outline-variant">
-              <h3 className="font-bold text-headline-sm text-on-surface">Share Workspace</h3>
-              <button 
-                className="text-on-surface-variant/60 hover:text-on-surface text-2xl font-bold cursor-pointer" 
-                onClick={() => setShowShareModal(false)}
-              >
-                ×
-              </button>
-            </div>
-            <div className="p-6 flex flex-col gap-4">
-              <p className="text-body-sm text-on-surface-variant/80">Copy workspace link to share active source guides with classmate:</p>
-              <div className="flex border border-outline rounded-lg bg-slate-50 overflow-hidden">
-                <input 
-                  type="text" 
-                  value={window.location.href}
-                  className="flex-grow px-3 py-2 text-body-sm outline-none border-none bg-transparent text-on-surface-variant/70 font-mono" 
-                  readOnly 
-                />
-                <button 
-                  onClick={() => {
-                    navigator.clipboard.writeText(window.location.href);
-                    alert("StudyLM Workspace link copied!");
-                  }}
-                  className="px-4 bg-primary text-white font-bold text-label-sm hover:opacity-90 cursor-pointer shrink-0"
-                >
-                  Copy
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── OVERLAY MODAL: STUDY ANALYTICS ── */}
-      {showAnalyticsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm border border-outline-variant overflow-hidden animate-scale-in">
-            <div className="flex justify-between items-center px-6 py-4 bg-slate-50 border-b border-outline-variant">
-              <h3 className="font-bold text-headline-sm text-on-surface">Study Analytics</h3>
-              <button 
-                className="text-on-surface-variant/60 hover:text-on-surface text-2xl font-bold cursor-pointer" 
-                onClick={() => setShowAnalyticsModal(false)}
-              >
-                ×
-              </button>
-            </div>
-            <div className="p-6 flex flex-col gap-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-slate-50 border border-outline-variant rounded-lg p-3 text-center">
-                  <div className="text-2xl font-bold text-primary font-mono">{notebooks.length}</div>
-                  <div className="text-[10px] text-on-surface-variant/60 uppercase font-mono tracking-wider font-bold mt-1">Active Notebooks</div>
-                </div>
-                <div className="bg-slate-50 border border-outline-variant rounded-lg p-3 text-center">
-                  <div className="text-2xl font-bold text-primary font-mono">{activeNotebook.sources.length}</div>
-                  <div className="text-[10px] text-on-surface-variant/60 uppercase font-mono tracking-wider font-bold mt-1">Total Sources</div>
-                </div>
-                <div className="bg-slate-50 border border-outline-variant rounded-lg p-3 text-center">
-                  <div className="text-2xl font-bold text-primary font-mono">{activeNotebook.notes.length}</div>
-                  <div className="text-[10px] text-on-surface-variant/60 uppercase font-mono tracking-wider font-bold mt-1">Saved Outlines</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      </aside>
 
     </div>
   );

@@ -191,7 +191,7 @@ export default function StudyLM({ navigate }) {
 
   // ══ LANDING PAGE ════════════════════════════════════════════════════════
   return (
-    <div className="app">
+    <div className="app landing-page">
 
       {/* ── HEADER ────────────────────────────────────────────────────────── */}
       <header className="header">
