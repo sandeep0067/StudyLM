@@ -27,7 +27,7 @@
   }
 }
 
-body {
+body.landing-mode {
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background-color: #09090b;
@@ -189,18 +189,18 @@ h1, h2, h3, h4, h5, h6 {
     direction: ltr;
 }
 
-::-webkit-scrollbar {
+.landing-page::-webkit-scrollbar {
     width: 6px;
     height: 6px;
 }
-::-webkit-scrollbar-track {
+.landing-page::-webkit-scrollbar-track {
     background: transparent;
 }
-::-webkit-scrollbar-thumb {
+.landing-page::-webkit-scrollbar-thumb {
     background: #E5E7EB;
     border-radius: 10px;
 }
-::-webkit-scrollbar-thumb:hover {
+.landing-page::-webkit-scrollbar-thumb:hover {
     background: #D1D5DB;
 }
 
@@ -222,7 +222,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.landing-page *, .landing-page *::before, .landing-page *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
 :root {
@@ -242,7 +242,7 @@ html { scroll-behavior: smooth; }
   --pad: clamp(24px, 5vw, 64px);
 }
 
-body {
+body.landing-mode {
   background-color: #fafafa;
   color: var(--ink);
   font-family: var(--f-sans);
@@ -261,8 +261,8 @@ body {
   );
 }
 
-a { text-decoration: none; color: inherit; }
-button { font-family: inherit; cursor: pointer; background: none; border: none; }
+.landing-page a { text-decoration: none; color: inherit; }
+.landing-page button { font-family: inherit; cursor: pointer; background: none; border: none; }
 
 /* ── Animation ───────────────────────────────────────────────────────────── */
 .rv { opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease-out, transform 0.5s ease-out; }
@@ -3224,3 +3224,13 @@ button { font-family: inherit; cursor: pointer; background: none; border: none; 
 
 
 
+
+
+/* ── Added for new Dashboard ── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.btn-press { transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease; }
+.btn-press:active { transform: scale(0.97); }
+.premium-blur-dark { background: rgba(15, 23, 42, 0.2); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+.shadow-premium { box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 0 3px rgba(0,0,0,0.02); }
+.shadow-premium-lg { box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.08), 0 0 4px rgba(0,0,0,0.03); }

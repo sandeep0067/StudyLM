@@ -155,7 +155,7 @@ const SimulatedDemo = () => (
   <section id="demo" className="section demo-sec">
     <Reveal>
       <h2 className="sec-h2 demo-h2">See it in action.</h2>
-      <p className="demo-sub">Watch how StudyLM turns dense study material into clear, structured knowledge — in seconds.</p>
+      <p className="demo-sub">Watch how Meridian turns dense knowledge assets into a unified cognitive workspaces — in seconds.</p>
     </Reveal>
 
     <Reveal delay={120}>
@@ -168,7 +168,7 @@ const SimulatedDemo = () => (
 );
 
 
-export default function StudyLM({ navigate }) {
+export default function Meridian({ navigate }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq]   = useState(null);
   const [inputValue, setInputValue] = useState('');
@@ -197,7 +197,7 @@ export default function StudyLM({ navigate }) {
       <header className="header">
         <div className="header-grid">
           <div className="cell cell-logo">
-            <span className="logo-text">StudyLM</span>
+            <span className="logo-text">Meridian</span>
           </div>
           <div className="cell cell-nav hidden-mob">
             <a href="#engine">Engine</a>
@@ -227,7 +227,7 @@ export default function StudyLM({ navigate }) {
         </div>
         <div className="hero-center">
           <Reveal className="hero-content">
-            <h1 className="hero-h1">What do you want to master today?</h1>
+            <h1 className="hero-h1">What are you working on today?</h1>
             
             {/* INTERACTIVE PROMPT UI */}
             <form onSubmit={handleSearch} className="prompt-ui-unified">
@@ -243,7 +243,7 @@ export default function StudyLM({ navigate }) {
                   className="prompt-input-massive"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Search a text or structure..."
+                  placeholder="Search workspaces, documents, or Repos..."
                 />
                 <button type="submit" className={`prompt-send-massive ${inputValue.length > 0 ? 'active' : ''}`}>
                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -255,8 +255,8 @@ export default function StudyLM({ navigate }) {
               
               <div className="prompt-chips-minimal">
                 <button type="button" onClick={() => setInputValue('Summarize Chapter 4')}>Summarize Chapter 4</button>
-                <button type="button" onClick={() => setInputValue('Quiz me on the Krebs cycle')}>Quiz me on Krebs cycle</button>
-                <button type="button" onClick={() => setInputValue('Compare mitosis and meiosis')}>Compare mitosis & meiosis</button>
+                <button type="button" onClick={() => setInputValue('Explore Machine Learning Workspace')}>Quiz me on Krebs cycle</button>
+                <button type="button" onClick={() => setInputValue('Analyze Research Paper notes')}>Compare mitosis & meiosis</button>
               </div>
             </form>
           </Reveal>
@@ -316,7 +316,7 @@ export default function StudyLM({ navigate }) {
       <footer className="footer">
         <div className="foot-grid">
           <div className="foot-brand">
-            <span className="logo-text">StudyLM</span>
+            <span className="logo-text">Meridian</span>
             <span className="mono-label">© 2025</span>
           </div>
           <div className="foot-links">

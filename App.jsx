@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import StudyLMLanding from './StudyLM';
+import MeridianLanding from './Meridian';
 import Dashboard from './Dashboard';
 
 export default function App() {
@@ -9,16 +9,21 @@ export default function App() {
     const handleLocationChange = () => {
       setRoute(window.location.pathname);
     };
-
-    // Listen for custom pushstate events and browser back/forward (popstate)
     window.addEventListener('popstate', handleLocationChange);
     window.addEventListener('pushstate', handleLocationChange);
-
     return () => {
       window.removeEventListener('popstate', handleLocationChange);
       window.removeEventListener('pushstate', handleLocationChange);
     };
   }, []);
+
+  useEffect(() => {
+    if (route.startsWith('/dashboard')) {
+      document.body.classList.remove('landing-mode');
+    } else {
+      document.body.classList.add('landing-mode');
+    }
+  }, [route]);
 
   // Custom navigate function
   const navigate = (path) => {
@@ -30,5 +35,5 @@ export default function App() {
     return <Dashboard navigate={navigate} />;
   }
 
-  return <StudyLMLanding navigate={navigate} />;
+  return <MeridianLanding navigate={navigate} />;
 }
