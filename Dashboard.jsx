@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { generateOfflineContent, generateOfflineChatResponse } from './generators';
-import { INITIAL_NOTEBOOKS } from './mockData';
 import {
   Menu, Sparkles, Home, CheckCircle, Settings,
   BookOpen, AlertTriangle, Info, MessageSquare,
@@ -44,10 +43,12 @@ function BoatLogo({ size = 20, color = '#374151', sw = 1.6, animated = false }) 
 function parseInline(text) {
   if (!text) return text;
   const parts = []; let last = 0; let m;
-  const r = /\*\*(.*?)\*\*/g;
+  const r = /(\*\*|__)(.*?)\1|(\*|_)(.*?)\3|`(.*?)`/g;
   while ((m = r.exec(text)) !== null) {
     if (m.index > last) parts.push(text.slice(last, m.index));
-    parts.push(<strong key={m.index} style={{ fontWeight: 600, color: '#1e293b' }}>{m[1]}</strong>);
+    if (m[1]) parts.push(<strong key={m.index} style={{ fontWeight: 600, color: 'inherit' }}>{m[2]}</strong>);
+    else if (m[3]) parts.push(<em key={m.index} style={{ fontStyle: 'italic', color: 'inherit' }}>{m[4]}</em>);
+    else if (m[5]) parts.push(<code key={m.index} style={{ fontFamily: 'monospace', fontSize: '0.9em', background: 'rgba(0,0,0,0.05)', padding: '2px 4px', borderRadius: 4, color: 'inherit' }}>{m[5]}</code>);
     last = r.lastIndex;
   }
   if (last < text.length) parts.push(text.slice(last));
@@ -63,7 +64,7 @@ function MD({ content }) {
     out.push(
       <ul key={`ul${k}`} style={{ margin: '8px 0', padding: '0 0 0 16px', listStyle: 'none' }}>
         {listItems.map((it, i) => (
-          <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 6, fontSize: 14, color: '#475569', lineHeight: 1.65 }}>
+          <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 6, fontSize: 14, color: 'inherit', lineHeight: 1.65 }}>
             <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#cbd5e1', flexShrink: 0, marginTop: 8 }} />
             <span>{parseInline(it)}</span>
           </li>
@@ -100,7 +101,7 @@ function MD({ content }) {
     if (t.startsWith('> '))   { flushList(i); out.push(<div key={`bq${i}`} style={{ margin: '12px 0', paddingLeft: 12, borderLeft: '2px solid #e2e8f0', fontSize: 13.5, color: '#64748b', fontStyle: 'italic' }}>{parseInline(t.slice(2))}</div>); continue; }
     if (t.startsWith('- ') || t.startsWith('* ')) { listItems.push(t.slice(2)); continue; }
     flushList(i);
-    if (t) out.push(<p key={`p${i}`} style={{ fontSize: 14.5, lineHeight: 1.75, color: '#475569', marginBottom: 4 }}>{parseInline(line)}</p>);
+    if (t) out.push(<p key={`p${i}`} style={{ fontSize: 14.5, lineHeight: 1.75, color: 'inherit', marginBottom: 4, margin: '4px 0' }}>{parseInline(line)}</p>);
   }
   flushList(lines.length);
   return <div>{out}</div>;
@@ -359,13 +360,40 @@ function WsNavItem({ n, active, onClick, onRename, onDelete }) {
 /* ─────────────────────────────────────────
    MAIN DASHBOARD
 ──────────────────────────────────────────*/
-export default function Dashboard() {
+export default function Dashboard({ navigate }) {
   // Always in DOM — keeps ref valid for file picker
   const fileInputRef = useRef(null);
   const chatEndRef   = useRef(null);
   const renameRef    = useRef(null);
 
-  const [notebooks, setNotebooks]   = useState(INITIAL_NOTEBOOKS);
+  const [notebooks, setNotebooks] = useState(() => {
+    try {
+      const saved = localStorage.getItem('meridian_workspaces');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error('Failed to load workspaces from local storage', e);
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('meridian_workspaces', JSON.stringify(notebooks));
+  }, [notebooks]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q');
+    if (q) {
+      const id = 'ws-' + Date.now();
+      setNotebooks(prev => [...prev, { id, name: 'New Project', sources: [], chatHistory: [], summaryData: '', timelineData: '', mindmapData: '', projectPlanData: '', flashcards: [] }]);
+      setTimeout(() => {
+        setActiveId(id);
+        setChatMsg(q);
+      }, 0);
+      window.history.replaceState({}, '', '/dashboard');
+    }
+  }, []);
+
   const [activeId, setActiveId]     = useState(null);
   const [tab, setTab]               = useState('summary');
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -381,6 +409,17 @@ export default function Dashboard() {
   const [renameTarget, setRenameTarget] = useState(null);
   const [renameVal, setRenameVal]   = useState('');
   const [toast, setToast]           = useState(null);
+  const [rWidth, setRWidth]         = useState(288);
+  const [isDraggingR, setIsDraggingR] = useState(false);
+
+  useEffect(() => {
+    if (!isDraggingR) return;
+    const onMove = e => setRWidth(Math.max(250, Math.min(800, window.innerWidth - e.clientX)));
+    const onUp = () => setIsDraggingR(false);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+  }, [isDraggingR]);
 
   const nb = notebooks.find(n => n.id === activeId) || null;
 
@@ -406,17 +445,22 @@ export default function Dashboard() {
   };
 
   /* ── Gemini API ── */
-  const callGemini = async (sys, prompt) => {
+  const callGemini = async (sys, prompt, isJson = false) => {
+    const body = {
+      contents: [{ parts: [{ text: prompt }] }],
+      systemInstruction: { parts: [{ text: sys }] },
+      generationConfig: { temperature: 0.2 }
+    };
+    if (isJson) body.generationConfig.responseMimeType = "application/json";
+
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
-      { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          systemInstruction: { parts: [{ text: sys }] },
-          generationConfig: { temperature: 0.2 }
-        }) }
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
     );
-    if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err?.error?.message || `API ${res.status}: ${res.statusText}`);
+    }
     return (await res.json()).candidates[0].content.parts[0].text;
   };
 
@@ -433,16 +477,31 @@ export default function Dashboard() {
         else if (FIELD[type]) upd({ [FIELD[type]]: off[type] });
       } else {
         const cfgs = {
-          summary:    ['Expert analyst. Write a structured markdown summary with ## headers.', `Summarize:\n${srcText}`],
-          timeline:   ['Historian. Write a timeline. Each bullet: - **Event**: description.', `Timeline:\n${srcText}`],
-          mindmap:    ['Architect. Indented * bullet mind map. Bold each main topic.', `Mind map:\n${srcText}`],
-          plan:       ['PM. Phased roadmap: ### Phase headers + - [ ] task checkboxes.', `Roadmap:\n${srcText}`],
-          flashcards: ['Teacher. Output ONLY valid JSON: [{"q":"...","a":"..."}]. Nothing else.', `Flashcards:\n${srcText}`],
+          summary:    [
+            'You are an analyst. Summarize this text quickly and concisely using markdown (`##` for title, bullet points).',
+            `Summarize concisely:\n\n${srcText}`
+          ],
+          timeline:   [
+            'You are a historian. Extract up to 10 key events. Format as a strict markdown list: `- **[Time]**: [Event]`. Be extremely brief.',
+            `Extract a quick timeline (max 10 items) from:\n\n${srcText}`
+          ],
+          mindmap:    [
+            'You are a systems expert. Create a very brief, indented markdown list (`*`, `  *`) representing the core concepts. No intro text.',
+            `Create a quick concept list from:\n\n${srcText}`
+          ],
+          plan:       [
+            'You are a PM. Create a short roadmap. Use `### Phase [X]: [Name]` and `- [ ] [Task]`. Limit to 3 phases, very brief.',
+            `Generate a quick roadmap from:\n\n${srcText}`
+          ],
+          flashcards: [
+            'Generate exactly 5 flashcards for key terms. Output ONLY a valid JSON array of objects with keys "q" and "a". Keep answers very short.',
+            `Generate 5 quick JSON flashcards from:\n\n${srcText}`
+          ],
         };
         const [sys, prompt] = cfgs[type] || cfgs.summary;
-        const resp = await callGemini(sys, prompt);
+        const resp = await callGemini(sys, prompt, type === 'flashcards');
         if (type === 'flashcards') {
-          try { upd({ flashcards: JSON.parse(resp.replace(/```json\n?|```\n?/g, '').trim()) }); }
+          try { upd({ flashcards: JSON.parse(resp.replace(/```json/i, '').replace(/```/, '').trim()) }); }
           catch { upd({ flashcards: [] }); showToast('Could not parse flashcards — try again.', 'warn'); }
         } else {
           upd({ [FIELD[type]]: resp });
@@ -470,8 +529,8 @@ export default function Dashboard() {
       const ctx = nb.sources.filter(s => s.active).map(s => `[${s.name}]:\n${s.text}`).join('\n\n');
       const histStr = hist.map(h => `${h.sender === 'user' ? 'User' : 'Meridian'}: ${h.text}`).join('\n');
       const resp = await callGemini(
-        'You are Meridian, a concise research assistant. Answer using only the provided context.',
-        `Context:\n${ctx}\n\nConversation:\n${histStr}\n\nMeridian:`
+        'You are Meridian, a concise, highly intelligent research assistant. You answer the user\'s questions using strictly the provided context. If the answer is not in the context, politely state that you cannot find it in the current documents. Format your response beautifully using markdown (bolding, lists, code blocks if necessary).',
+        `Context Documents:\n${ctx}\n\n---\nConversation History:\n${histStr}\n\nMeridian:`
       );
       upd({ chatHistory: [...hist, { sender: 'ai', text: resp }] });
     } catch (e) {
@@ -564,13 +623,13 @@ export default function Dashboard() {
     centerPane: { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, borderRight: '1px solid #f0ebe1' },
     tabBar: { height: 44, borderBottom: '1px solid #f0ebe1', display: 'flex', alignItems: 'center', gap: 2, padding: '0 10px', flexShrink: 0, overflowX: 'auto', scrollbarWidth: 'none' },
     viewer: { flex: 1, overflowY: 'auto', position: 'relative', scrollbarWidth: 'thin', scrollbarColor: '#e7e5e4 transparent' },
-    rPanel: { width: 288, flexShrink: 0, display: 'flex', flexDirection: 'column', background: '#faf8f5' },
+    rPanel: { width: rWidth, flexShrink: 0, display: 'flex', flexDirection: 'column', background: '#faf8f5', position: 'relative' },
     rHead:  { height: 44, borderBottom: '1px solid #f0ebe1', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 14px', flexShrink: 0 },
     rLbl:   { fontSize: 11.5, fontWeight: 700, color: '#78716c', textTransform: 'uppercase', letterSpacing: '0.07em' },
   };
 
   return (
-    <div style={S.root}
+    <div style={{ ...S.root, userSelect: isDraggingR ? 'none' : 'auto', cursor: isDraggingR ? 'col-resize' : 'auto' }}
       onDragOver={e => { if (nb) { e.preventDefault(); setIsDragging(true); }}}
       onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setIsDragging(false); }}
       onDrop={handleDrop}
@@ -597,7 +656,7 @@ export default function Dashboard() {
 
       {/* ══ SIDEBAR ══ */}
       <aside style={{ ...S.sb, width: sidebarOpen ? 240 : 0 }}>
-        <div style={S.sbHead}>
+        <div style={{ ...S.sbHead, cursor: 'pointer' }} onClick={() => navigate && navigate('/')}>
           <BoatLogo size={18} color="#374151" sw={1.7} />
           <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-0.025em', color: '#0f172a' }}>Meridian</span>
         </div>
@@ -655,10 +714,10 @@ export default function Dashboard() {
               <button onClick={() => compile(tab)} disabled={compiling || !hasSources}
                 style={{
                   height: 32, padding: '0 16px', borderRadius: 8, border: 'none',
-                  background: (compiling || !hasSources) ? '#e2e8f0' : 'linear-gradient(135deg, #10b981, #3b82f6, #a855f7)',
+                  background: (compiling || !hasSources) ? '#e2e8f0' : '#0f172a',
                   cursor: (compiling || !hasSources) ? 'not-allowed' : 'pointer', fontSize: 12.5, fontWeight: 600,
                   color: (compiling || !hasSources) ? '#94a3b8' : '#fff', display: 'flex', alignItems: 'center', gap: 6,
-                  fontFamily: 'inherit', transition: 'all 0.12s', boxShadow: (compiling || !hasSources) ? 'none' : '0 2px 8px rgba(59, 130, 246, 0.25)'
+                  fontFamily: 'inherit', transition: 'all 0.12s'
                 }}
                 onMouseOver={e => { if (!compiling && hasSources) e.currentTarget.style.opacity = '0.9'; }}
                 onMouseOut={e => { if (!compiling && hasSources) e.currentTarget.style.opacity = '1'; }}>
@@ -902,11 +961,23 @@ export default function Dashboard() {
               </div>
             </div>
 
+            {/* ── DRAG HANDLE ── */}
+            <div
+              onMouseDown={() => setIsDraggingR(true)}
+              style={{
+                width: 6, cursor: 'col-resize', background: isDraggingR ? '#3b82f6' : 'transparent',
+                transition: 'background 0.15s', zIndex: 10, flexShrink: 0,
+                borderLeft: '1px solid #f0ebe1' // Replaces centerPane borderRight if needed, but keeping it invisible is fine
+              }}
+              onMouseEnter={e => { if (!isDraggingR) e.currentTarget.style.background = '#e2e8f0'; }}
+              onMouseLeave={e => { if (!isDraggingR) e.currentTarget.style.background = 'transparent'; }}
+            />
+
             {/* ── RIGHT PANEL ── */}
             <div style={S.rPanel}>
 
               {/* Sources */}
-              <div style={{ flex: '0 0 50%', display: 'flex', flexDirection: 'column', borderBottom: '1px solid #f1f5f9' }}>
+              <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', borderBottom: '1px solid #f1f5f9' }}>
                 <div style={S.rHead}>
                   <span style={S.rLbl}>Sources</span>
                   <button onClick={() => setModal('source')} title="Add source"
@@ -941,7 +1012,7 @@ export default function Dashboard() {
               </div>
 
               {/* Chat */}
-              <div style={{ flex: '0 0 50%', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
                 <div style={S.rHead}>
                   <span style={S.rLbl}>Assistant</span>
                 </div>
@@ -955,7 +1026,7 @@ export default function Dashboard() {
                   {nb.chatHistory.map((msg, i) => (
                     <div key={i} style={{ display: 'flex', justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start' }}>
                       <div style={{ maxWidth: '88%', padding: '10px 14px', borderRadius: msg.sender === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px', background: msg.sender === 'user' ? '#0f172a' : '#fff', color: msg.sender === 'user' ? '#f8fafc' : '#334155', fontSize: 13, lineHeight: 1.6, border: msg.sender === 'user' ? 'none' : '1px solid #f1f5f9', boxShadow: msg.sender === 'ai' ? '0 1px 3px rgba(0,0,0,0.04)' : 'none', userSelect: 'text', wordBreak: 'break-word' }}>
-                        {msg.text}
+                        <MD content={msg.text} />
                       </div>
                     </div>
                   ))}
