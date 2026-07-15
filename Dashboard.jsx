@@ -241,16 +241,29 @@ function WorkspaceCard({ n, onOpen, onDelete, onRename }) {
       <button
         onClick={() => onOpen(n.id)}
         style={{
-          width: '100%', textAlign: 'left', padding: '16px', borderRadius: 16,
-          border: hov ? '1px solid #cbd5e1' : '1px solid #e2e8f0',
-          background: hov ? '#f8fafc' : '#fff',
-          cursor: 'pointer', transition: 'all 0.12s',
-          boxShadow: hov ? '0 4px 12px rgba(0,0,0,0.06)' : '0 1px 3px rgba(0,0,0,0.03)',
-          display: 'flex', flexDirection: 'column', gap: 12, minHeight: 120
+          width: '100%', textAlign: 'left', padding: '18px', borderRadius: 14,
+          border: `1px solid ${hov ? '#c7d2fe' : '#E5E7EB'}`,
+          background: hov ? '#ffffff' : '#ffffff',
+          cursor: 'pointer',
+          transition: 'all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          boxShadow: hov
+            ? '0 8px 30px rgba(79,70,229,0.12), 0 2px 8px rgba(0,0,0,0.04)'
+            : '0 1px 3px rgba(0,0,0,0.04)',
+          transform: hov ? 'translateY(-3px)' : 'translateY(0)',
+          display: 'flex', flexDirection: 'column', gap: 14, minHeight: 120
         }}
       >
-        <div style={{ width: 36, height: 36, borderRadius: 10, background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <FileText size={16} strokeWidth={1.75} color="#64748b" />
+        {/* Accent bar — docks to top edge */}
+        <div style={{
+          position: 'absolute', top: 0, left: 16, right: 16, height: 2, borderRadius: '0 0 4px 4px',
+          background: 'linear-gradient(90deg, #4F46E5, #0891B2)',
+          opacity: hov ? 1 : 0,
+          transition: 'opacity 0.2s ease, transform 0.2s ease',
+          transform: hov ? 'scaleX(1)' : 'scaleX(0.3)',
+          transformOrigin: 'left'
+        }} />
+        <div style={{ width: 36, height: 36, borderRadius: 10, background: hov ? '#eef2ff' : '#f8fafc', border: `1px solid ${hov ? '#c7d2fe' : '#f1f5f9'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
+          <FileText size={16} strokeWidth={1.75} color={hov ? '#4F46E5' : '#94a3b8'} />
         </div>
         <div>
           <p style={{ fontSize: 13.5, fontWeight: 600, color: '#0f172a', marginBottom: 4, lineHeight: 1.3 }}>{n.name}</p>
@@ -259,12 +272,11 @@ function WorkspaceCard({ n, onOpen, onDelete, onRename }) {
           </p>
         </div>
       </button>
-      {/* Hover actions */}
       {hov && (
-        <div style={{ position: 'absolute', top: 10, right: 10, display: 'flex', gap: 2, background: '#fff', border: '1px solid #e2e8f0', borderRadius: 8, padding: 3, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+        <div style={{ position: 'absolute', top: 10, right: 10, display: 'flex', gap: 2, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8, padding: 3, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
           <button onClick={e => { e.stopPropagation(); onRename(n); }} title="Rename"
             style={{ width: 24, height: 24, borderRadius: 5, border: 'none', background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}
-            onMouseOver={e => { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.color = '#374151'; }}
+            onMouseOver={e => { e.currentTarget.style.background = '#eef2ff'; e.currentTarget.style.color = '#4F46E5'; }}
             onMouseOut={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = '#94a3b8'; }}>
             <Edit2 size={11} strokeWidth={2} />
           </button>
@@ -287,16 +299,19 @@ function NewCard({ onClick }) {
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        width: '100%', minHeight: 120, borderRadius: 16, cursor: 'pointer',
-        border: `2px dashed ${hov ? '#94a3b8' : '#e2e8f0'}`,
-        background: hov ? '#f8fafc' : '#fff',
+        width: '100%', minHeight: 120, borderRadius: 14, cursor: 'pointer',
+        border: `1.5px dashed ${hov ? '#818cf8' : '#c7d2fe'}`,
+        background: hov ? '#eef2ff' : '#f5f3ff08',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        gap: 8, transition: 'all 0.12s', fontFamily: 'inherit'
+        gap: 8, fontFamily: 'inherit',
+        transition: 'all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        transform: hov ? 'translateY(-3px)' : 'translateY(0)',
+        boxShadow: hov ? '0 8px 24px rgba(79,70,229,0.1)' : 'none',
       }}>
-      <div style={{ width: 32, height: 32, borderRadius: 8, border: `2px dashed ${hov ? '#94a3b8' : '#e2e8f0'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Plus size={15} strokeWidth={2.5} color={hov ? '#64748b' : '#94a3b8'} />
+      <div style={{ width: 32, height: 32, borderRadius: 8, background: hov ? '#818cf8' : 'transparent', border: `1.5px dashed ${hov ? 'transparent' : '#818cf8'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
+        <Plus size={15} strokeWidth={2.5} color={hov ? '#fff' : '#818cf8'} />
       </div>
-      <span style={{ fontSize: 12.5, fontWeight: 600, color: hov ? '#475569' : '#94a3b8' }}>New Workspace</span>
+      <span style={{ fontSize: 12.5, fontWeight: 600, color: hov ? '#4F46E5' : '#818cf8' }}>New Workspace</span>
     </button>
   );
 }
@@ -306,13 +321,19 @@ function NewCard({ onClick }) {
 ──────────────────────────────────────────*/
 function NavItem({ icon: Icon, label, active, onClick }) {
   const [hov, setHov] = useState(false);
-  const bg = active ? 'rgba(15,23,42,0.08)' : hov ? 'rgba(0,0,0,0.04)' : 'transparent';
-  const col = active ? '#0f172a' : '#64748b';
   return (
     <button onClick={onClick}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
-      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '7px 12px', borderRadius: 8, border: 'none', background: bg, cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, fontWeight: active ? 600 : 500, color: col, transition: 'background 0.1s' }}>
+      style={{
+        width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '7px 12px',
+        borderRadius: 8, border: 'none',
+        background: active ? '#EEF2FF' : hov ? '#EFEFED' : 'transparent',
+        cursor: 'pointer', fontFamily: 'inherit', fontSize: 13,
+        fontWeight: active ? 600 : 500,
+        color: active ? '#4F46E5' : hov ? '#111827' : '#6B7280',
+        transition: 'all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      }}>
       <Icon size={15} strokeWidth={active ? 2 : 1.75} />
       {label}
     </button>
@@ -330,25 +351,26 @@ function WsNavItem({ n, active, onClick, onRename, onDelete }) {
           width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '7px 12px',
           paddingRight: hov ? 56 : 12,
           borderRadius: 8, border: 'none',
-          background: active ? 'rgba(15,23,42,0.08)' : hov ? 'rgba(0,0,0,0.04)' : 'transparent',
+          background: active ? '#EEF2FF' : hov ? '#EFEFED' : 'transparent',
           cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, fontWeight: active ? 600 : 500,
-          color: active ? '#0f172a' : '#64748b', transition: 'all 0.1s', textAlign: 'left'
+          color: active ? '#4F46E5' : hov ? '#111827' : '#6B7280',
+          transition: 'all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94)', textAlign: 'left',
         }}>
-        <FileText size={14} strokeWidth={1.75} style={{ flexShrink: 0, color: active ? '#374151' : '#94a3b8' }} />
+        <FileText size={14} strokeWidth={1.75} style={{ flexShrink: 0, color: active ? '#4F46E5' : hov ? '#374151' : '#9CA3AF' }} />
         <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.name}</span>
       </button>
       {hov && (
         <div style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', display: 'flex', gap: 2 }}>
           <button onClick={e => { e.stopPropagation(); onRename(); }}
-            style={{ width: 22, height: 22, borderRadius: 5, border: 'none', background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}
-            onMouseOver={e => { e.currentTarget.style.background = '#e2e8f0'; e.currentTarget.style.color = '#374151'; }}
-            onMouseOut={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = '#94a3b8'; }}>
+            style={{ width: 22, height: 22, borderRadius: 5, border: 'none', background: 'rgba(255,255,255,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF' }}
+            onMouseOver={e => { e.currentTarget.style.background = '#EEF2FF'; e.currentTarget.style.color = '#4F46E5'; }}
+            onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#9CA3AF'; }}>
             <Edit2 size={10} strokeWidth={2} />
           </button>
           <button onClick={e => { e.stopPropagation(); onDelete(); }}
-            style={{ width: 22, height: 22, borderRadius: 5, border: 'none', background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}
-            onMouseOver={e => { e.currentTarget.style.background = '#fef2f2'; e.currentTarget.style.color = '#ef4444'; }}
-            onMouseOut={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = '#94a3b8'; }}>
+            style={{ width: 22, height: 22, borderRadius: 5, border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF' }}
+            onMouseOver={e => { e.currentTarget.style.background = '#FEF2F2'; e.currentTarget.style.color = '#EF4444'; }}
+            onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#9CA3AF'; }}>
             <Trash2 size={10} strokeWidth={2} />
           </button>
         </div>
@@ -611,21 +633,24 @@ export default function Dashboard({ navigate }) {
   const rmPhases      = tab === 'plan'     && currentData ? parseRoadmap(currentData)   : [];
 
   /* ─────── styles shorthand ─────── */
+  const INDIGO = '#4F46E5';
+  const CYAN   = '#0891B2';
+
   const S = {
-    root:   { display: 'flex', height: '100vh', overflow: 'hidden', fontFamily: "'Inter', -apple-system, sans-serif", background: '#fff', color: '#0f172a' },
-    sb:     { flexShrink: 0, display: 'flex', flexDirection: 'column', borderRight: '1px solid #f0ebe1', background: '#faf8f5', overflow: 'hidden', transition: 'width 0.25s cubic-bezier(0.4,0,0.2,1)' },
-    sbHead: { height: 56, display: 'flex', alignItems: 'center', gap: 10, padding: '0 16px', borderBottom: '1px solid #f0ebe1', flexShrink: 0 },
-    sbNav:  { flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '10px 8px', scrollbarWidth: 'none' },
-    sbLbl:  { fontSize: 10.5, fontWeight: 700, color: '#a8a29e', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '16px 12px 6px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
-    sbFoot: { flexShrink: 0, borderTop: '1px solid #f0ebe1', padding: 8 },
-    main:   { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 },
-    topbar: { height: 56, borderBottom: '1px solid #f0ebe1', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px', flexShrink: 0, background: '#fff' },
-    centerPane: { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, borderRight: '1px solid #f0ebe1' },
-    tabBar: { height: 44, borderBottom: '1px solid #f0ebe1', display: 'flex', alignItems: 'center', gap: 2, padding: '0 10px', flexShrink: 0, overflowX: 'auto', scrollbarWidth: 'none' },
-    viewer: { flex: 1, overflowY: 'auto', position: 'relative', scrollbarWidth: 'thin', scrollbarColor: '#e7e5e4 transparent' },
-    rPanel: { width: rWidth, flexShrink: 0, display: 'flex', flexDirection: 'column', background: '#faf8f5', position: 'relative' },
-    rHead:  { height: 44, borderBottom: '1px solid #f0ebe1', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 14px', flexShrink: 0 },
-    rLbl:   { fontSize: 11.5, fontWeight: 700, color: '#78716c', textTransform: 'uppercase', letterSpacing: '0.07em' },
+    root:       { display: 'flex', height: '100vh', overflow: 'hidden', fontFamily: "'Inter', -apple-system, sans-serif", background: '#FAFAF8', color: '#0f172a' },
+    sb:         { flexShrink: 0, display: 'flex', flexDirection: 'column', background: '#F7F6F3', overflow: 'hidden', transition: 'width 0.25s cubic-bezier(0.4,0,0.2,1)', borderRight: '1px solid #E5E7EB' },
+    sbHead:     { height: 56, display: 'flex', alignItems: 'center', gap: 10, padding: '0 16px', borderBottom: '1px solid #E5E7EB', flexShrink: 0 },
+    sbNav:      { flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '10px 8px', scrollbarWidth: 'none' },
+    sbLbl:      { fontSize: 10, fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.12em', padding: '16px 12px 6px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
+    sbFoot:     { flexShrink: 0, borderTop: '1px solid #E5E7EB', padding: 8 },
+    main:       { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 },
+    topbar:     { height: 56, borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', flexShrink: 0, background: '#ffffff' },
+    centerPane: { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 },
+    tabBar:     { height: 48, borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 4, padding: '0 16px', flexShrink: 0, overflowX: 'auto', scrollbarWidth: 'none', background: '#fff' },
+    viewer:     { flex: 1, overflowY: 'auto', position: 'relative', scrollbarWidth: 'thin', scrollbarColor: '#e5e7eb transparent', background: '#FAFAF8' },
+    rPanel:     { width: rWidth, flexShrink: 0, display: 'flex', flexDirection: 'column', background: '#ffffff', borderLeft: '1px solid #E5E7EB', position: 'relative' },
+    rHead:      { height: 44, borderBottom: '1px solid #F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 14px', flexShrink: 0, background: '#FAFAF8' },
+    rLbl:       { fontSize: 10, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.12em' },
   };
 
   return (
@@ -656,18 +681,21 @@ export default function Dashboard({ navigate }) {
 
       {/* ══ SIDEBAR ══ */}
       <aside style={{ ...S.sb, width: sidebarOpen ? 240 : 0 }}>
-        <div style={{ ...S.sbHead, cursor: 'pointer' }} onClick={() => navigate && navigate('/')}>
-          <BoatLogo size={18} color="#374151" sw={1.7} />
-          <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-0.025em', color: '#0f172a' }}>Meridian</span>
+        <div style={{ ...S.sbHead, cursor: 'pointer', transition: 'background 0.15s' }}
+          onClick={() => navigate && navigate('/')}
+          onMouseEnter={e => e.currentTarget.style.background = '#EFEFED'}
+          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+          <BoatLogo size={18} color="#4F46E5" sw={1.7} />
+          <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-0.025em', color: '#111827' }}>Meridian</span>
         </div>
         <div style={S.sbNav}>
           <NavItem icon={Home} label="Home" active={activeId === null} onClick={() => setActiveId(null)} />
           <div style={S.sbLbl}>
             <span>Workspaces</span>
             <button onClick={createWs} title="New workspace"
-              style={{ width: 20, height: 20, borderRadius: 5, border: 'none', background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}
-              onMouseOver={e => { e.currentTarget.style.background = '#e2e8f0'; e.currentTarget.style.color = '#374151'; }}
-              onMouseOut={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = '#94a3b8'; }}>
+              style={{ width: 20, height: 20, borderRadius: 5, border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF' }}
+              onMouseOver={e => { e.currentTarget.style.background = '#EEF2FF'; e.currentTarget.style.color = '#4F46E5'; }}
+              onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#9CA3AF'; }}>
               <Plus size={13} strokeWidth={2.5} />
             </button>
           </div>
@@ -696,10 +724,10 @@ export default function Dashboard({ navigate }) {
               <Menu size={17} strokeWidth={2} />
             </button>
             {/* Breadcrumb */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#94a3b8', fontWeight: 500 }}>
-              <BoatLogo size={14} color="#94a3b8" sw={1.75} />
-              <span>Meridian</span>
-              {nb && <><ChevronRight size={13} strokeWidth={2} style={{ color: '#cbd5e1' }} /><span style={{ color: '#1e293b' }}>{nb.name}</span></>}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#9CA3AF', fontWeight: 500 }}>
+              <BoatLogo size={14} color="#4F46E5" sw={1.75} />
+              <span style={{ color: '#6B7280' }}>Meridian</span>
+              {nb && <><ChevronRight size={13} strokeWidth={2} style={{ color: '#D1D5DB' }} /><span style={{ color: '#111827', fontWeight: 600 }}>{nb.name}</span></>}
             </div>
           </div>
           {/* Actions */}
@@ -714,13 +742,14 @@ export default function Dashboard({ navigate }) {
               <button onClick={() => compile(tab)} disabled={compiling || !hasSources}
                 style={{
                   height: 32, padding: '0 16px', borderRadius: 8, border: 'none',
-                  background: (compiling || !hasSources) ? '#e2e8f0' : '#0f172a',
+                  background: (compiling || !hasSources) ? '#e5e7eb' : `linear-gradient(90deg, ${INDIGO}, ${CYAN})`,
                   cursor: (compiling || !hasSources) ? 'not-allowed' : 'pointer', fontSize: 12.5, fontWeight: 600,
-                  color: (compiling || !hasSources) ? '#94a3b8' : '#fff', display: 'flex', alignItems: 'center', gap: 6,
-                  fontFamily: 'inherit', transition: 'all 0.12s'
+                  color: (compiling || !hasSources) ? '#9ca3af' : '#fff', display: 'flex', alignItems: 'center', gap: 6,
+                  fontFamily: 'inherit', transition: 'all 0.15s',
+                  boxShadow: (!compiling && hasSources) ? '0 2px 8px rgba(79,70,229,0.3)' : 'none'
                 }}
-                onMouseOver={e => { if (!compiling && hasSources) e.currentTarget.style.opacity = '0.9'; }}
-                onMouseOut={e => { if (!compiling && hasSources) e.currentTarget.style.opacity = '1'; }}>
+                onMouseOver={e => { if (!compiling && hasSources) { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.transform = 'translateY(-1px)'; }}}
+                onMouseOut={e => { if (!compiling && hasSources) { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)'; }}}>
                 {compiling ? <Loader2 size={13} strokeWidth={2.5} style={{ animation: 'spin 1s linear infinite' }} /> : <Sparkles size={13} strokeWidth={2.5} />}
                 {compiling ? 'Generating…' : 'Generate'}
               </button>
@@ -730,38 +759,39 @@ export default function Dashboard({ navigate }) {
 
         {/* ── HOME ── */}
         {!nb ? (
-          <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none' }}>
-            <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 64px 80px' }}>
+          <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none', background: '#f8fafc', backgroundImage: 'radial-gradient(#e2e8f0 1px, transparent 1px)', backgroundSize: '24px 24px' }}>
+            <div style={{ maxWidth: 1100, margin: '0 auto', padding: '64px 56px 80px' }}>
 
               {/* ── Hero ── */}
-              <div style={{ marginBottom: 52 }}>
-                {/* Boat mark — free, animated, no box */}
-                <div style={{ marginBottom: 28 }}>
-                  <BoatLogo size={52} color="#1e293b" sw={1.35} animated={true} />
+              <div style={{ marginBottom: 56 }}>
+                <div style={{ marginBottom: 24 }}>
+                  <BoatLogo size={48} color="#1e293b" sw={1.35} animated={true} />
                 </div>
 
-                <h1 style={{ margin: '0 0 14px', fontSize: 36, fontWeight: 800, letterSpacing: '-0.04em', color: '#0f172a', lineHeight: 1.15 }}>
+                <h1 style={{ margin: '0 0 12px', fontSize: 38, fontWeight: 800, letterSpacing: '-0.04em', color: '#0f172a', lineHeight: 1.1 }}>
                   {getGreeting()}
                 </h1>
-                <p style={{ margin: 0, fontSize: 16, color: '#64748b', lineHeight: 1.7, maxWidth: 440 }}>
+                <p style={{ margin: 0, fontSize: 16, color: '#64748b', lineHeight: 1.75, maxWidth: 460 }}>
                   Meridian reads your documents and turns them into an <span style={{ color: 'transparent', backgroundClip: 'text', WebkitBackgroundClip: 'text', backgroundImage: 'linear-gradient(135deg, #10b981, #3b82f6, #a855f7)', fontWeight: 600, animation: 'aurora 4s ease infinite', backgroundSize: '200% 200%' }}>intelligent research workspace</span> — summaries, timelines, roadmaps, and conversation.
                 </p>
               </div>
 
-
               {/* ── Workspaces ── */}
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-                  <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Your Workspaces</p>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div style={{ width: 3, height: 14, borderRadius: 99, background: 'linear-gradient(180deg, #10b981, #3b82f6)' }} />
+                    <p style={{ margin: 0, fontSize: 12, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Your Workspaces</p>
+                  </div>
                   {notebooks.length > 0 && (
-                    <button onClick={createWs} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 600, color: '#475569', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: '4px 8px', borderRadius: 6 }}
-                      onMouseOver={e => { e.currentTarget.style.background = '#f1f5f9'; }}
+                    <button onClick={createWs} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 600, color: '#3b82f6', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: '4px 10px', borderRadius: 8 }}
+                      onMouseOver={e => { e.currentTarget.style.background = '#eff6ff'; }}
                       onMouseOut={e => { e.currentTarget.style.background = 'none'; }}>
                       <Plus size={13} strokeWidth={2.5} /> New
                     </button>
                   )}
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 12 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14 }}>
                   {notebooks.map(n => (
                     <WorkspaceCard key={n.id} n={n}
                       onOpen={id => setActiveId(id)}
@@ -787,9 +817,14 @@ export default function Dashboard({ navigate }) {
                   const active = tab === t.id;
                   return (
                     <button key={t.id} onClick={() => setTab(t.id)}
-                      style={{ height: 30, padding: '0 12px', borderRadius: 7, border: 'none', background: active ? '#0f172a' : 'none', color: active ? '#fff' : '#94a3b8', cursor: 'pointer', fontSize: 12.5, fontWeight: active ? 600 : 500, display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap', fontFamily: 'inherit', transition: 'all 0.1s' }}
+                      style={{ height: 32, padding: '0 14px', borderRadius: 99, border: 'none',
+                        background: active ? '#6366f1' : 'none',
+                        color: active ? '#fff' : '#64748b', cursor: 'pointer', fontSize: 12.5,
+                        fontWeight: active ? 600 : 500, display: 'flex', alignItems: 'center', gap: 6,
+                        whiteSpace: 'nowrap', fontFamily: 'inherit', transition: 'all 0.15s',
+                      }}
                       onMouseOver={e => { if (!active) { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.color = '#374151'; }}}
-                      onMouseOut={e => { if (!active) { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = '#94a3b8'; }}}>
+                      onMouseOut={e => { if (!active) { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = '#64748b'; }}}>
                       <t.icon size={13} strokeWidth={active ? 2 : 1.75} />
                       {t.label}
                     </button>
@@ -803,15 +838,17 @@ export default function Dashboard({ navigate }) {
                 {/* Empty: no active sources */}
                 {!hasSources && (
                   <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, textAlign: 'center', padding: 40 }}>
-                    <div style={{ width: 48, height: 48, borderRadius: 14, background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <UploadCloud size={22} strokeWidth={1.5} color="#94a3b8" />
+                    <div style={{ width: 56, height: 56, borderRadius: 18, background: '#eef2ff', border: '1px solid #c7d2fe', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <UploadCloud size={24} strokeWidth={1.5} color="#6366f1" />
                     </div>
                     <div>
                       <p style={{ margin: '0 0 6px', fontSize: 15, fontWeight: 600, color: '#334155' }}>Add a source to get started</p>
                       <p style={{ margin: 0, fontSize: 13, color: '#94a3b8', lineHeight: 1.6 }}>Upload a PDF document. Meridian will extract and index<br />its contents so you can generate insights.</p>
                     </div>
                     <button onClick={() => setModal('source')}
-                      style={{ height: 36, padding: '0 18px', borderRadius: 10, border: 'none', background: '#0f172a', color: '#fff', cursor: 'pointer', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit' }}>
+                      style={{ height: 38, padding: '0 20px', borderRadius: 10, border: 'none', background: '#6366f1', color: '#fff', cursor: 'pointer', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit' }}
+                      onMouseOver={e => e.currentTarget.style.background = '#4f46e5'}
+                      onMouseOut={e => e.currentTarget.style.background = '#6366f1'}>
                       <UploadCloud size={13} strokeWidth={2} /> Add Source
                     </button>
                   </div>
@@ -820,15 +857,17 @@ export default function Dashboard({ navigate }) {
                 {/* Empty: sources active but no generated content */}
                 {hasSources && !hasData && (
                   <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, textAlign: 'center', padding: 40 }}>
-                    <div style={{ width: 48, height: 48, borderRadius: 14, background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Sparkles size={22} strokeWidth={1.5} color="#94a3b8" />
+                    <div style={{ width: 56, height: 56, borderRadius: 18, background: '#eef2ff', border: '1px solid #c7d2fe', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Sparkles size={24} strokeWidth={1.5} color="#6366f1" />
                     </div>
                     <div>
                       <p style={{ margin: '0 0 6px', fontSize: 15, fontWeight: 600, color: '#334155' }}>Ready to generate</p>
-                      <p style={{ margin: 0, fontSize: 13, color: '#94a3b8' }}>Click <strong style={{ color: '#475569', fontWeight: 600 }}>Generate</strong> in the toolbar to create your {TABS.find(t => t.id === tab)?.label?.toLowerCase()}.</p>
+                      <p style={{ margin: 0, fontSize: 13, color: '#94a3b8' }}>Click <strong style={{ color: '#6366f1', fontWeight: 600 }}>Generate</strong> in the toolbar to create your {TABS.find(t => t.id === tab)?.label?.toLowerCase()}.</p>
                     </div>
                     <button onClick={() => compile(tab)} disabled={compiling}
-                      style={{ height: 36, padding: '0 18px', borderRadius: 10, border: 'none', background: compiling ? '#e2e8f0' : '#0f172a', color: compiling ? '#94a3b8' : '#fff', cursor: compiling ? 'not-allowed' : 'pointer', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit' }}>
+                      style={{ height: 38, padding: '0 20px', borderRadius: 10, border: 'none', background: compiling ? '#e2e8f0' : '#6366f1', color: compiling ? '#94a3b8' : '#fff', cursor: compiling ? 'not-allowed' : 'pointer', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit' }}
+                      onMouseOver={e => { if (!compiling) e.currentTarget.style.background = '#4f46e5'; }}
+                      onMouseOut={e => { if (!compiling) e.currentTarget.style.background = '#6366f1'; }}>
                       {compiling ? <Loader2 size={13} style={{ animation: 'spin 1s linear infinite' }} /> : <Sparkles size={13} strokeWidth={2} />}
                       {compiling ? 'Generating…' : `Generate ${TABS.find(t => t.id === tab)?.label}`}
                     </button>
@@ -837,7 +876,7 @@ export default function Dashboard({ navigate }) {
 
                 {/* Content renderers */}
                 {hasData && (
-                  <div style={{ padding: '32px 40px', maxWidth: 720, margin: '0 auto' }}>
+                  <div style={{ padding: '28px 36px', maxWidth: 760, margin: '0 auto' }}>
 
                     {tab === 'summary' && (
                       <div style={{ userSelect: 'text' }}>
@@ -852,7 +891,7 @@ export default function Dashboard({ navigate }) {
                         <div style={{ position: 'relative', paddingLeft: 28, borderLeft: '2px solid #f1f5f9' }}>
                           {tlItems.map((m, i) => (
                             <div key={i} style={{ position: 'relative', marginBottom: 32 }}>
-                              <div style={{ position: 'absolute', left: -35, top: 5, width: 10, height: 10, borderRadius: '50%', border: '2px solid #334155', background: '#fff' }} />
+                              <div style={{ position: 'absolute', left: -35, top: 5, width: 10, height: 10, borderRadius: '50%', border: '2px solid #6366f1', background: '#fff' }} />
                               <p style={{ margin: '0 0 3px', fontSize: 11, fontFamily: 'monospace', color: '#94a3b8' }}>#{String(i + 1).padStart(2, '0')}</p>
                               <h3 style={{ margin: '0 0 6px', fontSize: 15, fontWeight: 600, color: '#0f172a', letterSpacing: '-0.01em' }}>{m.title}</h3>
                               <p style={{ margin: 0, fontSize: 13.5, color: '#64748b', lineHeight: 1.65 }}>{m.desc}</p>
