@@ -17,14 +17,6 @@ export default function App() {
     };
   }, []);
 
-  useEffect(() => {
-    if (route.startsWith('/dashboard')) {
-      document.body.classList.remove('landing-mode');
-    } else {
-      document.body.classList.add('landing-mode');
-    }
-  }, [route]);
-
   // Custom navigate function
   const navigate = (path) => {
     window.history.pushState({}, '', path);

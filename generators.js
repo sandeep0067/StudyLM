@@ -4,14 +4,14 @@ export const generateOfflineContent = (notebook) => {
   
   if (!sourcesText.trim()) {
     return {
-      summary: "## 📖 Summary Outline\n\nPlease add or activate at least one source on the left sidebar to generate a summary guide.",
-      timeline: "## 📅 Timeline\n\nPlease add or activate at least one source on the left sidebar to generate a timeline.",
-      mindmap: "## 🧠 Mind Map\n\nPlease add or activate at least one source on the left sidebar to generate a mind map.",
+      summary: "## � Summary Outline\n\nPlease add or activate at least one source on the left sidebar to generate a summary guide.",
+      timeline: "## ⏱️ Timeline\n\nPlease add or activate at least one source on the left sidebar to generate a timeline.",
+      mindmap: "## 🕸️ Mind Map\n\nPlease add or activate at least one source on the left sidebar to generate a mind map.",
       flashcards: [],
-      report: "## 📄 Research Report\n\nPlease add or activate at least one source on the left sidebar to generate a report.",
-      documentation: "## 📝 Documentation\n\nPlease add or activate at least one source on the left sidebar to generate documentation.",
-      plan: "## 📋 Project Plan\n\nPlease add or activate at least one source on the left sidebar to generate a project plan.",
-      presentation: "## 📊 Presentation\n\nPlease add or activate at least one source on the left sidebar to generate a presentation outline."
+      report: "## � Research Report\n\nPlease add or activate at least one source on the left sidebar to generate a report.",
+      documentation: "## � Documentation\n\nPlease add or activate at least one source on the left sidebar to generate documentation.",
+      plan: "## ✅ Project Plan\n\nPlease add or activate at least one source on the left sidebar to generate a project plan.",
+      presentation: "## 🎤 Presentation\n\nPlease add or activate at least one source on the left sidebar to generate a presentation outline."
     };
   }
 
@@ -33,7 +33,7 @@ export const generateOfflineContent = (notebook) => {
   
   const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
-  const summary = `## 📖 Executive Summary: ${cap(kw1)} Architecture
+  const summary = `## � Executive Summary: ${cap(kw1)} Architecture
   
 This comprehensive knowledge guide extracts core concepts from your source documents, highlighting the active interface between **${cap(kw1)}** and **${cap(kw2)}**.
 
@@ -49,7 +49,7 @@ $$\\text{Efficiency}(\\eta) = \\int_{0}^{t} \\frac{\\text{${cap(kw1)}}(x)}{\\tex
 > [!NOTE]
 > Regulation of **${kw2}** is heavily dependent on the feedback loops of **${kw4}**. Ensure check parameters remain bounded.`;
 
-  const timeline = `## 📅 Operational Timeline: Development of ${cap(kw1)}
+  const timeline = `## ⏱️ Operational Timeline: Development of ${cap(kw1)}
   
 A sequential mapping of key milestones and chronological events extracted from active source details.
 
@@ -62,7 +62,7 @@ A sequential mapping of key milestones and chronological events extracted from a
 - **Milestone 4: Superposition Stabilization**
   Final stabilization and calibration of the **${kw1}** network.`;
 
-  const mindmap = `## 🧠 Concept Mind Map: ${cap(kw1)} Ecosystem
+  const mindmap = `## 🕸️ Concept Mind Map: ${cap(kw1)} Ecosystem
   
 An indented hierarchical mapping representing links between key subjects in your sources.
 
@@ -77,7 +77,7 @@ An indented hierarchical mapping representing links between key subjects in your
         *   **${cap(kw4)}** (System outputs)
         *   Analytical validation`;
 
-  const report = `## 📄 Academic Research Report: Analysis of ${cap(kw1)}
+  const report = `## � Academic Research Report: Analysis of ${cap(kw1)}
   
 ### Abstract
 This research report examines the systemic interactions of **${kw1}** in active workspace applications, analyzing how **${kw2}** and **${kw3}** govern overall performance parameters.
@@ -88,7 +88,7 @@ Sources were evaluated through keyword extraction and semantic mapping, charting
 ### Conclusion
 The empirical details show that maintaining high levels of **${kw1}** ensures optimal feedback cycle stabilization when **${kw3}** remains tightly controlled.`;
 
-  const documentation = `## 📝 Developer Documentation: API Guide for ${cap(kw1)}
+  const documentation = `## � Developer Documentation: API Guide for ${cap(kw1)}
   
 This guide documents the API endpoints, methods, and configurations used to manipulate **${kw1}** components.
 

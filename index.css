@@ -27,13 +27,17 @@
   }
 }
 
-body.landing-mode {
+body {
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: #09090b;
-  color: #fafafa;
+  background-color: #fafafa;
+  color: #1e293b;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -242,13 +246,14 @@ html { scroll-behavior: smooth; }
   --pad: clamp(24px, 5vw, 64px);
 }
 
-body.landing-mode {
-  background-color: #fafafa;
-  color: var(--ink);
-  font-family: var(--f-sans);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+.landing-page {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 10px,
+    #e6e6e6 10px,
+    #e6e6e6 11px
+  );
 }
 
 .landing-page {
