@@ -46,18 +46,18 @@ function StudyGuideIllustration({ width = 120, height = 120 }) {
   return (
     <svg width={width} height={height} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
       {/* Background circle */}
-      <circle cx="60" cy="60" r="55" fill="#FFF7ED" />
+      <circle cx="60" cy="60" r="55" fill={COLORS.primaryLight} />
       {/* Stacked books */}
-      <rect x="25" y="35" width="70" height="12" rx="2" fill="#F97316" />
-      <rect x="25" y="35" width="5" height="12" rx="1" fill="#EA580C" />
-      <rect x="25" y="50" width="70" height="12" rx="2" fill="#FB923C" />
-      <rect x="25" y="50" width="5" height="12" rx="1" fill="#F97316" />
-      <rect x="25" y="65" width="70" height="12" rx="2" fill="#FDBA74" />
-      <rect x="25" y="65" width="5" height="12" rx="1" fill="#FB923C" />
+      <rect x="25" y="35" width="70" height="12" rx="2" fill={COLORS.primary} />
+      <rect x="25" y="35" width="5" height="12" rx="1" fill={COLORS.primaryDark} />
+      <rect x="25" y="50" width="70" height="12" rx="2" fill={COLORS.primarySoft} />
+      <rect x="25" y="50" width="5" height="12" rx="1" fill={COLORS.primary} />
+      <rect x="25" y="65" width="70" height="12" rx="2" fill={COLORS.purple} />
+      <rect x="25" y="65" width="5" height="12" rx="1" fill={COLORS.primarySoft} />
       {/* Sparkle */}
-      <path d="M95 25L98 32L105 35L98 38L95 45L92 38L85 35L92 32L95 25Z" fill="#F97316" />
-      <circle cx="90" cy="40" r="3" fill="#FDBA74" opacity="0.6" />
-      <circle cx="100" cy="30" r="2" fill="#FDBA74" opacity="0.4" />
+      <path d="M95 25L98 32L105 35L98 38L95 45L92 38L85 35L92 32L95 25Z" fill={COLORS.primary} />
+      <circle cx="90" cy="40" r="3" fill={COLORS.primarySoft} opacity="0.6" />
+      <circle cx="100" cy="30" r="2" fill={COLORS.primarySoft} opacity="0.4" />
     </svg>
   );
 }
@@ -67,19 +67,19 @@ function ChatIllustration({ width = 120, height = 120 }) {
   return (
     <svg width={width} height={height} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
       {/* Background circle */}
-      <circle cx="60" cy="60" r="55" fill="#F5F3FF" />
+      <circle cx="60" cy="60" r="55" fill={COLORS.secondaryLight} />
       {/* Chat bubbles */}
-      <rect x="20" y="30" width="45" height="30" rx="8" fill="#8B5CF6" />
-      <path d="M20 50L15 58L20 55V50Z" fill="#8B5CF6" />
-      <rect x="55" y="55" width="45" height="30" rx="8" fill="#A78BFA" />
-      <path d="M100 75L105 83L100 80V75Z" fill="#A78BFA" />
+      <rect x="20" y="30" width="45" height="30" rx="8" fill={COLORS.secondary} />
+      <path d="M20 50L15 58L20 55V50Z" fill={COLORS.secondary} />
+      <rect x="55" y="55" width="45" height="30" rx="8" fill={COLORS.secondarySoft} />
+      <path d="M100 75L105 83L100 80V75Z" fill={COLORS.secondarySoft} />
       {/* Decorative dots */}
-      <circle cx="35" cy="45" r="3" fill="#DDD6FE" />
-      <circle cx="45" cy="45" r="3" fill="#DDD6FE" />
-      <circle cx="55" cy="45" r="3" fill="#DDD6FE" />
-      <circle cx="70" cy="70" r="3" fill="#DDD6FE" />
-      <circle cx="80" cy="70" r="3" fill="#DDD6FE" />
-      <circle cx="90" cy="70" r="3" fill="#DDD6FE" />
+      <circle cx="35" cy="45" r="3" fill={COLORS.secondaryLight} />
+      <circle cx="45" cy="45" r="3" fill={COLORS.secondaryLight} />
+      <circle cx="55" cy="45" r="3" fill={COLORS.secondaryLight} />
+      <circle cx="70" cy="70" r="3" fill={COLORS.secondaryLight} />
+      <circle cx="80" cy="70" r="3" fill={COLORS.secondaryLight} />
+      <circle cx="90" cy="70" r="3" fill={COLORS.secondaryLight} />
     </svg>
   );
 }
@@ -89,19 +89,19 @@ function FlashcardIllustration({ width = 120, height = 120 }) {
   return (
     <svg width={width} height={height} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
       {/* Background circle */}
-      <circle cx="60" cy="60" r="55" fill="#EFF6FF" />
+      <circle cx="60" cy="60" r="55" fill={COLORS.blueLight} />
       {/* Cards */}
-      <rect x="20" y="25" width="40" height="50" rx="6" fill="#3B82F6" transform="rotate(-10 40 50)" />
-      <rect x="50" y="35" width="40" height="50" rx="6" fill="#60A5FA" transform="rotate(10 70 60)" />
+      <rect x="20" y="25" width="40" height="50" rx="6" fill={COLORS.blue} transform="rotate(-10 40 50)" />
+      <rect x="50" y="35" width="40" height="50" rx="6" fill={COLORS.info} transform="rotate(10 70 60)" />
       {/* Card details */}
-      <rect x="25" y="32" width="30" height="4" rx="2" fill="#BFDBFE" transform="rotate(-10 40 34)" />
-      <rect x="25" y="40" width="25" height="3" rx="1.5" fill="#BFDBFE" transform="rotate(-10 37.5 41.5)" />
-      <rect x="25" y="47" width="28" height="3" rx="1.5" fill="#BFDBFE" transform="rotate(-10 39 48.5)" />
-      <rect x="55" y="42" width="30" height="4" rx="2" fill="#DBEAFE" transform="rotate(10 70 44)" />
-      <rect x="55" y="50" width="25" height="3" rx="1.5" fill="#DBEAFE" transform="rotate(10 67.5 51.5)" />
-      <rect x="55" y="57" width="28" height="3" rx="1.5" fill="#DBEAFE" transform="rotate(10 69 58.5)" />
+      <rect x="25" y="32" width="30" height="4" rx="2" fill={COLORS.blueLight} transform="rotate(-10 40 34)" />
+      <rect x="25" y="40" width="25" height="3" rx="1.5" fill={COLORS.blueLight} transform="rotate(-10 37.5 41.5)" />
+      <rect x="25" y="47" width="28" height="3" rx="1.5" fill={COLORS.blueLight} transform="rotate(-10 39 48.5)" />
+      <rect x="55" y="42" width="30" height="4" rx="2" fill={COLORS.blueLight} transform="rotate(10 70 44)" />
+      <rect x="55" y="50" width="25" height="3" rx="1.5" fill={COLORS.blueLight} transform="rotate(10 67.5 51.5)" />
+      <rect x="55" y="57" width="28" height="3" rx="1.5" fill={COLORS.blueLight} transform="rotate(10 69 58.5)" />
       {/* Star */}
-      <path d="M95 25L97 31L103 33L97 35L95 41L93 35L87 33L93 31L95 25Z" fill="#3B82F6" />
+      <path d="M95 25L97 31L103 33L97 35L95 41L93 35L87 33L93 31L95 25Z" fill={COLORS.blue} />
     </svg>
   );
 }
@@ -113,19 +113,19 @@ function UploadIllustration({ width = 160, height = 160 }) {
       {/* Background gradient */}
       <defs>
         <linearGradient id="uploadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#F97316" />
-          <stop offset="100%" stopColor="#FB923C" />
+          <stop offset="0%" stopColor={COLORS.primary} />
+          <stop offset="100%" stopColor={COLORS.primarySoft} />
         </linearGradient>
       </defs>
       <circle cx="80" cy="80" r="70" fill="url(#uploadGrad)" opacity="0.1" />
       {/* Document */}
-      <rect x="45" y="35" width="50" height="65" rx="4" fill="#FFF" stroke="#F97316" strokeWidth="2" />
-      <path d="M70 35V55H90" fill="#FED7AA" stroke="#F97316" strokeWidth="2" />
+      <rect x="45" y="35" width="50" height="65" rx="4" fill="#FFF" stroke={COLORS.primary} strokeWidth="2" />
+      <path d="M70 35V55H90" fill={COLORS.primaryLight} stroke={COLORS.primary} strokeWidth="2" />
       {/* Upload arrow */}
-      <path d="M70 85L70 65" stroke="#F97316" strokeWidth="3" strokeLinecap="round" />
-      <path d="M62 73L70 65L78 73" stroke="#F97316" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M70 85L70 65" stroke={COLORS.primary} strokeWidth="3" strokeLinecap="round" />
+      <path d="M62 73L70 65L78 73" stroke={COLORS.primary} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
       {/* Cloud */}
-      <path d="M50 95C40 95 35 90 35 82C35 75 40 70 48 68C50 58 60 55 70 55C80 55 90 60 92 70C100 72 105 78 105 85C105 95 95 100 80 100H50" fill="#FED7AA" stroke="#F97316" strokeWidth="2" />
+      <path d="M50 95C40 95 35 90 35 82C35 75 40 70 48 68C50 58 60 55 70 55C80 55 90 60 92 70C100 72 105 78 105 85C105 95 95 100 80 100H50" fill={COLORS.primaryLight} stroke={COLORS.primary} strokeWidth="2" />
     </svg>
   );
 }
@@ -137,24 +137,24 @@ function GenerateIllustration({ width = 160, height = 160 }) {
       {/* Background gradient */}
       <defs>
         <linearGradient id="genGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#8B5CF6" />
-          <stop offset="100%" stopColor="#A78BFA" />
+          <stop offset="0%" stopColor={COLORS.secondary} />
+          <stop offset="100%" stopColor={COLORS.secondarySoft} />
         </linearGradient>
       </defs>
       <circle cx="80" cy="80" r="70" fill="url(#genGrad)" opacity="0.1" />
       {/* Brain/AI icon */}
-      <circle cx="80" cy="60" r="25" fill="#DDD6FE" stroke="#8B5CF6" strokeWidth="2" />
-      <path d="M60 60C60 50 70 45 80 45C90 45 100 50 100 60" stroke="#8B5CF6" strokeWidth="2" fill="none" />
-      <path d="M65 75C65 85 75 90 80 90C85 90 95 85 95 75" stroke="#8B5CF6" strokeWidth="2" fill="none" />
+      <circle cx="80" cy="60" r="25" fill={COLORS.secondaryLight} stroke={COLORS.secondary} strokeWidth="2} />
+      <path d="M60 60C60 50 70 45 80 45C90 45 100 50 100 60" stroke={COLORS.secondary} strokeWidth="2" fill="none" />
+      <path d="M65 75C65 85 75 90 80 90C85 90 95 85 95 75" stroke={COLORS.secondary} strokeWidth="2" fill="none" />
       {/* Sparkles */}
-      <path d="M45 40L48 47L55 50L48 53L45 60L42 53L35 50L42 47L45 40Z" fill="#8B5CF6" />
-      <path d="M115 90L117 95L122 98L117 101L115 106L113 101L108 98L113 95L115 90Z" fill="#A78BFA" />
-      <circle cx="110" cy="45" r="4" fill="#DDD6FE" />
-      <circle cx="50" cy="100" r="3" fill="#DDD6FE" />
+      <path d="M45 40L48 47L55 50L48 53L45 60L42 53L35 50L42 47L45 40Z" fill={COLORS.secondary} />
+      <path d="M115 90L117 95L122 98L117 101L115 106L113 101L108 98L113 95L115 90Z" fill={COLORS.secondarySoft} />
+      <circle cx="110" cy="45" r="4" fill={COLORS.secondaryLight} />
+      <circle cx="50" cy="100" r="3" fill={COLORS.secondaryLight} />
       {/* Connection lines */}
-      <path d="M55 50L45 40" stroke="#A78BFA" strokeWidth="1.5" strokeDasharray="3 3" />
-      <path d="M105 50L110 45" stroke="#A78BFA" strokeWidth="1.5" strokeDasharray="3 3" />
-      <path d="M95 85L115 90" stroke="#A78BFA" strokeWidth="1.5" strokeDasharray="3 3" />
+      <path d="M55 50L45 40" stroke={COLORS.secondarySoft} strokeWidth="1.5" strokeDasharray="3 3" />
+      <path d="M105 50L110 45" stroke={COLORS.secondarySoft} strokeWidth="1.5" strokeDasharray="3 3" />
+      <path d="M95 85L115 90" stroke={COLORS.secondarySoft} strokeWidth="1.5" strokeDasharray="3 3" />
     </svg>
   );
 }
@@ -282,42 +282,80 @@ function parseRoadmap(text) {
 }
 
 /* ─────────────────────────────────────────
-   CONSTANTS - Premium Color System
+   CONSTANTS - Sophisticated Color System
 ──────────────────────────────────────────*/
 const COLORS = {
+  // Neutrals - sophisticated grayscale
   white: '#ffffff',
-  offWhite: '#fafbfc',
-  lightGray: '#f1f3f5',
-  mediumGray: '#e9ecef',
-  darkGray: '#868e96',
-  text: '#212529',
-  textSecondary: '#495057',
-  textMuted: '#6c757d',
-  accent: '#0d6efd',
-  accentLight: '#e7f1ff',
-  accentDark: '#0a58ca',
-  accentSecondary: '#6366f1',
-  accentSecondaryLight: '#eef2ff',
-  accentSecondaryDark: '#4f46e5',
-  accentTertiary: '#0dcaf0',
-  accentTertiaryLight: '#cff4fc',
-  accentTertiaryDark: '#0aa2c0',
-  border: '#dee2e6',
-  borderLight: '#e9ecef',
-  shadow: 'rgba(0, 0, 0, 0.1)',
-  shadowSubtle: 'rgba(0, 0, 0, 0.05)',
-  shadowLarge: 'rgba(0, 0, 0, 0.15)',
-  success: '#198754',
-  successLight: '#d1e7dd',
-  warning: '#ffc107',
-  warningLight: '#fff3cd',
-  danger: '#dc3545',
-  dangerLight: '#f8d7da',
-  glass: 'rgba(255, 255, 255, 0.7)',
-  glassDark: 'rgba(255, 255, 255, 0.9)',
   surface: '#ffffff',
-  surfaceElevated: '#ffffff',
-  background: '#f8f9fa'
+  surfaceElevated: '#fafbfc',
+  background: '#f4f6f8',
+  backgroundAlt: '#eef0f2',
+  
+  // Text hierarchy
+  text: '#1a1f36',
+  textSecondary: '#374151',
+  textTertiary: '#6b7280',
+  textMuted: '#9ca3af',
+  
+  // Primary - Deep Indigo (professional, trustworthy)
+  primary: '#4f46e5',
+  primaryLight: '#eef2ff',
+  primaryDark: '#4338ca',
+  primarySoft: '#818cf8',
+  
+  // Secondary - Teal (complementary, calming)
+  secondary: '#0d9488',
+  secondaryLight: '#ccfbf1',
+  secondaryDark: '#0f766e',
+  secondarySoft: '#2dd4bf',
+  
+  // Accent - Coral (energetic, highlights)
+  accent: '#f97316',
+  accentLight: '#ffedd5',
+  accentDark: '#ea580c',
+  accentSoft: '#fb923c',
+  
+  // Semantic colors
+  success: '#10b981',
+  successLight: '#d1fae5',
+  warning: '#f59e0b',
+  warningLight: '#fef3c7',
+  danger: '#ef4444',
+  dangerLight: '#fee2e2',
+  info: '#3b82f6',
+  infoLight: '#dbeafe',
+  
+  // Borders and dividers
+  border: '#e5e7eb',
+  borderLight: '#f3f4f6',
+  borderMedium: '#d1d5db',
+  
+  // Shadows - layered depth
+  shadow: 'rgba(0, 0, 0, 0.08)',
+  shadowSubtle: 'rgba(0, 0, 0, 0.04)',
+  shadowMedium: 'rgba(0, 0, 0, 0.12)',
+  shadowLarge: 'rgba(0, 0, 0, 0.16)',
+  shadowXLarge: 'rgba(0, 0, 0, 0.24)',
+  
+  // Glass effects
+  glass: 'rgba(255, 255, 255, 0.8)',
+  glassStrong: 'rgba(255, 255, 255, 0.95)',
+  glassTint: 'rgba(79, 70, 229, 0.05)',
+  
+  // Gradients
+  gradientPrimary: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+  gradientSecondary: 'linear-gradient(135deg, #0d9488 0%, #06b6d4 100%)',
+  gradientAccent: 'linear-gradient(135deg, #f97316 0%, #fbbf24 100%)',
+  gradientSurface: 'linear-gradient(180deg, #ffffff 0%, #fafbfc 100%)',
+  
+  // Additional colors for variety
+  purple: '#8b5cf6',
+  purpleLight: '#f5f3ff',
+  blue: '#3b82f6',
+  blueLight: '#eff6ff',
+  pink: '#ec4899',
+  pinkLight: '#fce7f3'
 };
 
 const FIELD = {
@@ -443,7 +481,7 @@ function WorkspaceCard({ n, index = 0, onOpen, onDelete, onRename }) {
             <h3 style={{ margin: '0 0 6px', fontSize: 16, fontWeight: 600, color: COLORS.text, lineHeight: 1.3 }}>
               {n.name}
             </h3>
-            <p style={{ margin: 0, fontSize: 13, color: COLORS.darkGray }}>
+            <p style={{ margin: 0, fontSize: 13, color: COLORS.textSecondary }}>
               {totalSrc} {totalSrc === 1 ? 'source' : 'sources'}
             </p>
           </div>
@@ -451,10 +489,10 @@ function WorkspaceCard({ n, index = 0, onOpen, onDelete, onRename }) {
           {totalSrc > 0 && (
             <div style={{ marginTop: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, fontSize: 12 }}>
-                <span style={{ color: COLORS.darkGray }}>{activeSrc} active</span>
+                <span style={{ color: COLORS.textSecondary }}>{activeSrc} active</span>
                 <span style={{ color: cardColor, fontWeight: 600 }}>{progress}%</span>
               </div>
-              <div style={{ height: 5, background: COLORS.lightGray, borderRadius: 3, overflow: 'hidden' }}>
+              <div style={{ height: 5, background: COLORS.backgroundAlt, borderRadius: 3, overflow: 'hidden' }}>
                 <div style={{ height: '100%', width: `${progress}%`, background: cardColor, borderRadius: 3, transition: 'width 0.3s ease' }} />
               </div>
             </div>
@@ -465,15 +503,15 @@ function WorkspaceCard({ n, index = 0, onOpen, onDelete, onRename }) {
       {hov && (
         <div style={{ position: 'absolute', bottom: 16, right: 16, display: 'flex', gap: 6 }}>
           <button onClick={e => { e.stopPropagation(); onRename(n); }} title="Rename"
-            style={{ width: 32, height: 32, borderRadius: 8, border: 'none', background: COLORS.white, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.darkGray, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
-            onMouseOver={e => { e.currentTarget.style.background = COLORS.lightGray; }}
+            style={{ width: 32, height: 32, borderRadius: 8, border: 'none', background: COLORS.white, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.textSecondary, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
+            onMouseOver={e => { e.currentTarget.style.background = COLORS.backgroundAlt; }}
             onMouseOut={e => { e.currentTarget.style.background = COLORS.white; }}>
             <Edit2 size={14} strokeWidth={2} />
           </button>
           <button onClick={e => { e.stopPropagation(); onDelete(n.id); }} title="Delete"
-            style={{ width: 32, height: 32, borderRadius: 8, border: 'none', background: COLORS.white, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.darkGray, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
+            style={{ width: 32, height: 32, borderRadius: 8, border: 'none', background: COLORS.white, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.textSecondary, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
             onMouseOver={e => { e.currentTarget.style.background = '#fee2e2'; e.currentTarget.style.color = '#ef4444'; }}
-            onMouseOut={e => { e.currentTarget.style.background = COLORS.white; e.currentTarget.style.color = COLORS.darkGray; }}>
+            onMouseOut={e => { e.currentTarget.style.background = COLORS.white; e.currentTarget.style.color = COLORS.textSecondary; }}>
             <Trash2 size={14} strokeWidth={2} />
           </button>
         </div>
@@ -499,10 +537,10 @@ function NewCard({ onClick }) {
         boxShadow: hov ? '0 8px 24px rgba(249,115,22,0.15)' : 'none',
         boxSizing: 'border-box', padding: 24
       }}>
-      <div style={{ width: 56, height: 56, borderRadius: 16, background: hov ? COLORS.accentOrange : COLORS.lightGray, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s', boxShadow: hov ? '0 4px 12px rgba(249,115,22,0.3)' : 'none' }}>
-        <Plus size={28} strokeWidth={2.5} color={hov ? COLORS.white : COLORS.darkGray} />
+      <div style={{ width: 56, height: 56, borderRadius: 16, background: hov ? COLORS.accentOrange : COLORS.backgroundAlt, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s', boxShadow: hov ? '0 4px 12px rgba(249,115,22,0.3)' : 'none' }}>
+        <Plus size={28} strokeWidth={2.5} color={hov ? COLORS.white : COLORS.textSecondary} />
       </div>
-      <span style={{ fontSize: 15, fontWeight: 600, color: hov ? COLORS.accentOrangeDark : COLORS.darkGray }}>Create Library</span>
+      <span style={{ fontSize: 15, fontWeight: 600, color: hov ? COLORS.accentOrangeDark : COLORS.textSecondary }}>Create Library</span>
     </button>
   );
 }
@@ -518,24 +556,24 @@ function NavItem({ icon: Icon, label, active, onClick, badgeColor = null }) {
       onMouseLeave={() => setHov(false)}
       style={{
         width: '100%', display: 'flex', alignItems: 'center', gap: 14, padding: '14px 16px',
-        borderRadius: 10, border: 'none',
-        background: active ? COLORS.accentLight : hov ? COLORS.lightGray : 'transparent',
+        borderRadius: 12, border: 'none',
+        background: active ? COLORS.primaryLight : hov ? COLORS.backgroundAlt : 'transparent',
         cursor: 'pointer', fontFamily: 'inherit', fontSize: 14.5,
         fontWeight: active ? 600 : 500,
-        color: active ? COLORS.accentDark : hov ? COLORS.text : COLORS.textSecondary,
+        color: active ? COLORS.primaryDark : hov ? COLORS.text : COLORS.textSecondary,
         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         position: 'relative',
-        ...(active && { boxShadow: '0 1px 3px rgba(13, 110, 253, 0.1)' })
+        ...(active && { boxShadow: '0 1px 3px rgba(79, 70, 229, 0.1)' })
       }}>
       <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Icon size={19} strokeWidth={active ? 2.5 : 2} color={active ? COLORS.accentDark : hov ? COLORS.text : COLORS.textSecondary} style={{ transition: 'all 0.2s' }} />
+        <Icon size={19} strokeWidth={active ? 2.5 : 2} color={active ? COLORS.primaryDark : hov ? COLORS.text : COLORS.textSecondary} style={{ transition: 'all 0.2s' }} />
         {badgeColor && (
           <div style={{ position: 'absolute', top: -3, right: -3, width: 8, height: 8, borderRadius: '50%', background: badgeColor, border: '2px solid #fff', boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }} />
         )}
       </div>
       <span style={{ transition: 'color 0.2s' }}>{label}</span>
       {active && (
-        <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 24, background: COLORS.accent, borderRadius: '0 4px 4px 0' }} />
+        <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 24, background: COLORS.primary, borderRadius: '0 4px 4px 0' }} />
       )}
     </button>
   );
@@ -552,26 +590,26 @@ function WsNavItem({ n, active, onClick, onRename, onDelete }) {
           width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px',
           paddingRight: hov ? 54 : 14,
           borderRadius: 8, border: 'none',
-          background: active ? COLORS.accentOrangeLight : hov ? COLORS.lightGray : 'transparent',
+          background: active ? COLORS.accentOrangeLight : hov ? COLORS.backgroundAlt : 'transparent',
           cursor: 'pointer', fontFamily: 'inherit', fontSize: 14, fontWeight: active ? 600 : 500,
-          color: active ? COLORS.accentOrangeDark : hov ? COLORS.text : COLORS.darkGray,
+          color: active ? COLORS.accentOrangeDark : hov ? COLORS.text : COLORS.textSecondary,
           transition: 'all 0.2s ease', textAlign: 'left',
         }}>
-        <FileText size={16} strokeWidth={active ? 2.2 : 1.8} style={{ flexShrink: 0, color: active ? COLORS.accentOrangeDark : hov ? COLORS.text : COLORS.darkGray, transition: 'color 0.2s' }} />
+        <FileText size={16} strokeWidth={active ? 2.2 : 1.8} style={{ flexShrink: 0, color: active ? COLORS.accentOrangeDark : hov ? COLORS.text : COLORS.textSecondary, transition: 'color 0.2s' }} />
         <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.name}</span>
       </button>
       {hov && (
         <div style={{ position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)', display: 'flex', gap: 2 }}>
           <button onClick={e => { e.stopPropagation(); onRename(); }}
-            style={{ width: 24, height: 24, borderRadius: 6, border: 'none', background: COLORS.lightGray, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.darkGray }}
+            style={{ width: 24, height: 24, borderRadius: 6, border: 'none', background: COLORS.backgroundAlt, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.textSecondary }}
             onMouseOver={e => { e.currentTarget.style.background = COLORS.mediumGray; }}
-            onMouseOut={e => { e.currentTarget.style.background = COLORS.lightGray; }}>
+            onMouseOut={e => { e.currentTarget.style.background = COLORS.backgroundAlt; }}>
             <Edit2 size={12} strokeWidth={2} />
           </button>
           <button onClick={e => { e.stopPropagation(); onDelete(); }}
-            style={{ width: 24, height: 24, borderRadius: 6, border: 'none', background: COLORS.lightGray, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.darkGray }}
+            style={{ width: 24, height: 24, borderRadius: 6, border: 'none', background: COLORS.backgroundAlt, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.textSecondary }}
             onMouseOver={e => { e.currentTarget.style.background = '#fee2e2'; e.currentTarget.style.color = '#ef4444'; }}
-            onMouseOut={e => { e.currentTarget.style.background = COLORS.lightGray; e.currentTarget.style.color = COLORS.darkGray; }}>
+            onMouseOut={e => { e.currentTarget.style.background = COLORS.backgroundAlt; e.currentTarget.style.color = COLORS.textSecondary; }}>
             <Trash2 size={12} strokeWidth={2} />
           </button>
         </div>
@@ -914,7 +952,7 @@ export default function Dashboard({ navigate }) {
             {title}
           </h2>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13, color: COLORS.darkGray, marginLeft: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13, color: COLORS.textSecondary, marginLeft: 16 }}>
           <span>{subtitle}</span>
           {nb?.sources?.some(s => s.active) && (
             <>
@@ -932,19 +970,19 @@ export default function Dashboard({ navigate }) {
   /* ─────── styles shorthand ─────── */
   const S = {
     root:       { display: 'flex', minHeight: '100vh', overflow: 'hidden', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', background: COLORS.background, color: COLORS.text },
-    sb:         { flexShrink: 0, display: 'flex', flexDirection: 'column', background: COLORS.surface, overflow: 'hidden', transition: 'width 0.3s cubic-bezier(0.4,0,0.2,1)', borderRight: `1px solid ${COLORS.borderLight}`, width: 280 },
-    sbHead:     { height: 72, display: 'flex', alignItems: 'center', gap: 12, padding: '0 24px', borderBottom: `1px solid ${COLORS.borderLight}`, flexShrink: 0 },
+    sb:         { flexShrink: 0, display: 'flex', flexDirection: 'column', background: COLORS.surface, overflow: 'hidden', transition: 'width 0.3s cubic-bezier(0.4,0,0.2,1)', borderRight: `1px solid ${COLORS.border}`, width: 280 },
+    sbHead:     { height: 72, display: 'flex', alignItems: 'center', gap: 12, padding: '0 24px', borderBottom: `1px solid ${COLORS.border}`, flexShrink: 0 },
     sbNav:      { flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '20px 16px', scrollbarWidth: 'none' },
-    sbLbl:      { fontSize: 11, fontWeight: 700, color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: '0.15em', padding: '28px 16px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
-    sbFoot:     { flexShrink: 0, borderTop: `1px solid ${COLORS.borderLight}`, padding: 20 },
+    sbLbl:      { fontSize: 11, fontWeight: 700, color: COLORS.textTertiary, textTransform: 'uppercase', letterSpacing: '0.15em', padding: '28px 16px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
+    sbFoot:     { flexShrink: 0, borderTop: `1px solid ${COLORS.border}`, padding: 20 },
     main:       { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, background: COLORS.background },
-    topbar:     { height: 80, borderBottom: `1px solid ${COLORS.borderLight}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 40px', flexShrink: 0, background: COLORS.surface },
+    topbar:     { height: 80, borderBottom: `1px solid ${COLORS.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 40px', flexShrink: 0, background: COLORS.surface },
     centerPane: { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 },
-    tabBar:     { height: 64, borderBottom: `1px solid ${COLORS.borderLight}`, display: 'flex', alignItems: 'center', gap: 2, padding: '0 32px', flexShrink: 0, overflowX: 'auto', scrollbarWidth: 'none', background: COLORS.surface },
-    viewer:     { flex: 1, overflowY: 'auto', position: 'relative', scrollbarWidth: 'thin', scrollbarColor: '#dee2e6 transparent', background: COLORS.background, padding: '40px' },
-    rPanel:     { width: rWidth, flexShrink: 0, display: 'flex', flexDirection: 'column', background: COLORS.surface, borderLeft: `1px solid ${COLORS.borderLight}`, position: 'relative' },
-    rHead:      { height: 64, borderBottom: `1px solid ${COLORS.borderLight}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', flexShrink: 0, background: COLORS.surface },
-    rLbl:       { fontSize: 11, fontWeight: 700, color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: '0.15em' },
+    tabBar:     { height: 64, borderBottom: `1px solid ${COLORS.border}`, display: 'flex', alignItems: 'center', gap: 2, padding: '0 32px', flexShrink: 0, overflowX: 'auto', scrollbarWidth: 'none', background: COLORS.surface },
+    viewer:     { flex: 1, overflowY: 'auto', position: 'relative', scrollbarWidth: 'thin', scrollbarColor: '#d1d5db transparent', background: COLORS.background, padding: '40px' },
+    rPanel:     { width: rWidth, flexShrink: 0, display: 'flex', flexDirection: 'column', background: COLORS.surface, borderLeft: `1px solid ${COLORS.border}`, position: 'relative' },
+    rHead:      { height: 64, borderBottom: `1px solid ${COLORS.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', flexShrink: 0, background: COLORS.surface },
+    rLbl:       { fontSize: 11, fontWeight: 700, color: COLORS.textTertiary, textTransform: 'uppercase', letterSpacing: '0.15em' },
   };
 
   return (
@@ -975,26 +1013,26 @@ export default function Dashboard({ navigate }) {
 
       {/* ══ SIDEBAR ══ */}
       <aside style={{ ...S.sb, width: sidebarOpen ? 280 : 0 }}>
-        <div style={{ ...S.sbHead, cursor: 'pointer', transition: 'background 0.2s', background: 'linear-gradient(180deg, #fff 0%, #fafafa 100%)' }}
+        <div style={{ ...S.sbHead, cursor: 'pointer', transition: 'background 0.2s', background: COLORS.gradientSurface }}
           onClick={() => navigate && navigate('/')}
-          onMouseEnter={e => e.currentTarget.style.background = COLORS.lightGray}
-          onMouseLeave={e => e.currentTarget.style.background = 'linear-gradient(180deg, #fff 0%, #fafafa 100%)'}>
+          onMouseEnter={e => e.currentTarget.style.background = COLORS.backgroundAlt}
+          onMouseLeave={e => e.currentTarget.style.background = COLORS.gradientSurface}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, #f97316 0%, #fb923c 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(249,115,22,0.25)' }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: COLORS.gradientPrimary, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)' }}>
               <BoatLogo size={22} color="#fff" sw={2.5} />
             </div>
             <div>
               <span style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-0.02em', color: COLORS.text, display: 'block', lineHeight: 1.2 }}>StudyLM</span>
-              <span style={{ fontSize: 11, fontWeight: 500, color: COLORS.darkGray, letterSpacing: '0.05em' }}>Smart Learning</span>
+              <span style={{ fontSize: 11, fontWeight: 500, color: COLORS.textTertiary, letterSpacing: '0.05em' }}>Smart Learning</span>
             </div>
           </div>
-          <span style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 700, color: COLORS.success, background: '#ecfdf5', padding: '6px 12px', borderRadius: 20, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Free</span>
+          <span style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 700, color: COLORS.success, background: COLORS.successLight, padding: '6px 12px', borderRadius: 20, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Free</span>
         </div>
         
         {/* Search Bar */}
         <div style={{ padding: '16px 20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 8, background: COLORS.lightGray, border: `1px solid ${COLORS.border}` }}>
-            <Search size={16} color={COLORS.darkGray} strokeWidth={2} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 8, background: COLORS.backgroundAlt, border: `1px solid ${COLORS.border}` }}>
+            <Search size={16} color={COLORS.textSecondary} strokeWidth={2} />
             <input type="text" placeholder="Search anything" style={{ border: 'none', background: 'none', outline: 'none', fontSize: 14, color: COLORS.text, flex: 1, fontFamily: 'inherit' }} />
           </div>
         </div>
@@ -1004,9 +1042,9 @@ export default function Dashboard({ navigate }) {
           <div style={S.sbLbl}>
             <span>My Libraries</span>
             <button onClick={createWs} title="New workspace"
-              style={{ width: 24, height: 24, borderRadius: 6, border: 'none', background: COLORS.lightGray, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.darkGray }}
+              style={{ width: 24, height: 24, borderRadius: 6, border: 'none', background: COLORS.backgroundAlt, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.textSecondary }}
               onMouseOver={e => { e.currentTarget.style.background = COLORS.mediumGray; }}
-              onMouseOut={e => { e.currentTarget.style.background = COLORS.lightGray; }}>
+              onMouseOut={e => { e.currentTarget.style.background = COLORS.backgroundAlt; }}>
               <Plus size={14} strokeWidth={2.5} />
             </button>
           </div>
@@ -1035,13 +1073,13 @@ export default function Dashboard({ navigate }) {
         <div style={S.topbar}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <button onClick={() => setSidebarOpen(s => !s)}
-              style={{ width: 44, height: 44, borderRadius: 12, border: 'none', background: COLORS.lightGray, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.darkGray, transition: 'all 0.2s' }}
+              style={{ width: 44, height: 44, borderRadius: 12, border: 'none', background: COLORS.backgroundAlt, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.textSecondary, transition: 'all 0.2s' }}
               onMouseOver={e => { e.currentTarget.style.background = COLORS.mediumGray; e.currentTarget.style.transform = 'scale(1.05)'; }}
-              onMouseOut={e => { e.currentTarget.style.background = COLORS.lightGray; e.currentTarget.style.transform = 'scale(1)'; }}>
+              onMouseOut={e => { e.currentTarget.style.background = COLORS.backgroundAlt; e.currentTarget.style.transform = 'scale(1)'; }}>
               <Menu size={22} strokeWidth={2} />
             </button>
             {/* Breadcrumb */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 15, color: COLORS.darkGray, fontWeight: 500 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 15, color: COLORS.textSecondary, fontWeight: 500 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: 'linear-gradient(135deg, #fff7ed 0%, #fff 100%)', borderRadius: 12, border: '1px solid #fed7aa' }}>
                 <BoatLogo size={20} color={COLORS.accentOrange} sw={2} />
                 <span style={{ color: COLORS.accentOrangeDark, fontWeight: 600 }}>StudyLM</span>
@@ -1066,7 +1104,7 @@ export default function Dashboard({ navigate }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <button onClick={() => setModal('source')}
                 style={{ height: 44, padding: '0 20px', borderRadius: 12, border: `1px solid ${COLORS.border}`, background: COLORS.white, cursor: 'pointer', fontSize: 14, fontWeight: 500, color: COLORS.text, display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'inherit', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', transition: 'all 0.2s' }}
-                onMouseOver={e => { e.currentTarget.style.background = COLORS.lightGray; e.currentTarget.style.borderColor = COLORS.accentOrange; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                onMouseOver={e => { e.currentTarget.style.background = COLORS.backgroundAlt; e.currentTarget.style.borderColor = COLORS.accentOrange; e.currentTarget.style.transform = 'translateY(-1px)'; }}
                 onMouseOut={e => { e.currentTarget.style.background = COLORS.white; e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.transform = 'translateY(0)'; }}>
                 <UploadCloud size={18} strokeWidth={2} /> Add Source
               </button>
@@ -1075,7 +1113,7 @@ export default function Dashboard({ navigate }) {
                   height: 44, padding: '0 24px', borderRadius: 12, border: 'none',
                   background: (compiling || !hasSources) ? COLORS.mediumGray : 'linear-gradient(135deg, #f97316 0%, #fb923c 100%)',
                   cursor: (compiling || !hasSources) ? 'not-allowed' : 'pointer', fontSize: 14, fontWeight: 600,
-                  color: (compiling || !hasSources) ? COLORS.darkGray : COLORS.white, display: 'flex', alignItems: 'center', gap: 10,
+                  color: (compiling || !hasSources) ? COLORS.textSecondary : COLORS.white, display: 'flex', alignItems: 'center', gap: 10,
                   fontFamily: 'inherit', boxShadow: (compiling || !hasSources) ? 'none' : '0 4px 12px rgba(249,115,22,0.3)',
                   transition: 'all 0.2s'
                 }}
@@ -1098,7 +1136,7 @@ export default function Dashboard({ navigate }) {
                 <h1 style={{ margin: '0 0 16px', fontSize: 42, fontWeight: 700, fontFamily: 'inherit', color: COLORS.text, lineHeight: 1.2, letterSpacing: '-0.02em' }}>
                   {getGreeting()},!
                 </h1>
-                <p style={{ margin: 0, fontSize: 18, color: COLORS.darkGray, lineHeight: 1.7, maxWidth: 700, marginLeft: 'auto', marginRight: 'auto' }}>
+                <p style={{ margin: 0, fontSize: 18, color: COLORS.textSecondary, lineHeight: 1.7, maxWidth: 700, marginLeft: 'auto', marginRight: 'auto' }}>
                   A new day, a new opportunity! Let's create something amazing together with your study tools.
                 </p>
               </div>
@@ -1106,47 +1144,47 @@ export default function Dashboard({ navigate }) {
               {/* ── Feature Cards ── */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, marginBottom: 32 }}>
                 {/* Study Guide Card */}
-                <div style={{ padding: 0, borderRadius: 16, background: COLORS.white, border: `1px solid ${COLORS.border}`, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'all 0.3s ease', overflow: 'hidden' }}
-                  onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(249,115,22,0.15)'; e.currentTarget.style.borderColor = '#f97316'; }}
+                <div style={{ padding: 0, borderRadius: 16, background: COLORS.surface, border: `1px solid ${COLORS.border}`, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'all 0.3s ease', overflow: 'hidden' }}
+                  onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = COLORS.shadowLarge; e.currentTarget.style.borderColor = COLORS.primary; }}
                   onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; e.currentTarget.style.borderColor = COLORS.border; }}>
                   <div style={{ height: 140, background: 'linear-gradient(180deg, #FFF7ED 0%, #fff 100%)', padding: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
                     <StudyGuideIllustration width={120} height={120} />
                   </div>
                   <div style={{ padding: 24 }}>
                     <h3 style={{ margin: '0 0 8px', fontSize: 17, fontWeight: 600, color: COLORS.text }}>Help me build my study guide</h3>
-                    <p style={{ margin: 0, fontSize: 14, color: COLORS.darkGray, lineHeight: 1.6 }}>Start fresh or let the system guide your layout and content.</p>
+                    <p style={{ margin: 0, fontSize: 14, color: COLORS.textSecondary, lineHeight: 1.6 }}>Start fresh or let the system guide your layout and content.</p>
                   </div>
                 </div>
 
                 {/* Chat with Docs Card */}
-                <div style={{ padding: 0, borderRadius: 16, background: COLORS.white, border: `1px solid ${COLORS.border}`, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'all 0.3s ease', overflow: 'hidden' }}
-                  onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(139,92,246,0.15)'; e.currentTarget.style.borderColor = '#8b5cf6'; }}
+                <div style={{ padding: 0, borderRadius: 16, background: COLORS.surface, border: `1px solid ${COLORS.border}`, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'all 0.3s ease', overflow: 'hidden' }}
+                  onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = COLORS.shadowLarge; e.currentTarget.style.borderColor = COLORS.secondary; }}
                   onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; e.currentTarget.style.borderColor = COLORS.border; }}>
                   <div style={{ height: 140, background: 'linear-gradient(180deg, #F5F3FF 0%, #fff 100%)', padding: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
                     <ChatIllustration width={120} height={120} />
                   </div>
                   <div style={{ padding: 24 }}>
                     <h3 style={{ margin: '0 0 8px', fontSize: 17, fontWeight: 600, color: COLORS.text }}>Help me chat with my docs</h3>
-                    <p style={{ margin: 0, fontSize: 14, color: COLORS.darkGray, lineHeight: 1.6 }}>The system will answer questions using your document context.</p>
+                    <p style={{ margin: 0, fontSize: 14, color: COLORS.textSecondary, lineHeight: 1.6 }}>The system will answer questions using your document context.</p>
                   </div>
                 </div>
 
                 {/* Flashcards Card */}
-                <div style={{ padding: 0, borderRadius: 16, background: COLORS.white, border: `1px solid ${COLORS.border}`, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'all 0.3s ease', overflow: 'hidden' }}
-                  onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(59,130,246,0.15)'; e.currentTarget.style.borderColor = '#3b82f6'; }}
+                <div style={{ padding: 0, borderRadius: 16, background: COLORS.surface, border: `1px solid ${COLORS.border}`, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'all 0.3s ease', overflow: 'hidden' }}
+                  onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = COLORS.shadowLarge; e.currentTarget.style.borderColor = COLORS.blue; }}
                   onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; e.currentTarget.style.borderColor = COLORS.border; }}>
                   <div style={{ height: 140, background: 'linear-gradient(180deg, #EFF6FF 0%, #fff 100%)', padding: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
                     <FlashcardIllustration width={120} height={120} />
                   </div>
                   <div style={{ padding: 24 }}>
                     <h3 style={{ margin: '0 0 8px', fontSize: 17, fontWeight: 600, color: COLORS.text }}>Help me create flashcards</h3>
-                    <p style={{ margin: 0, fontSize: 14, color: COLORS.darkGray, lineHeight: 1.6 }}>The system will generate personalized flashcards instantly.</p>
+                    <p style={{ margin: 0, fontSize: 14, color: COLORS.textSecondary, lineHeight: 1.6 }}>The system will generate personalized flashcards instantly.</p>
                   </div>
                 </div>
               </div>
 
               {/* ── Trial Offer Card ── */}
-              <div style={{ padding: 0, borderRadius: 20, background: `linear-gradient(135deg, ${COLORS.accentOrange} 0%, ${COLORS.accentOrangeDark} 100%)`, color: COLORS.white, marginBottom: 48, boxShadow: '0 8px 32px rgba(249,115,22,0.25)', overflow: 'hidden', display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
+              <div style={{ padding: 0, borderRadius: 20, background: COLORS.gradientPrimary, color: COLORS.white, marginBottom: 48, boxShadow: COLORS.shadowXLarge, overflow: 'hidden', display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
                 <div style={{ padding: '32px 40px', flex: 1, zIndex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
                     <div style={{ width: 48, height: 48, background: 'rgba(255,255,255,0.25)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)' }}>
@@ -1203,21 +1241,21 @@ export default function Dashboard({ navigate }) {
                 {TABS.map(t => {
                   const active = tab === t.id;
                   const tabColors = {
-                    summary: COLORS.accentOrange,
-                    timeline: COLORS.accentPurple,
-                    mindmap: COLORS.accentBlue,
+                    summary: COLORS.primary,
+                    timeline: COLORS.secondary,
+                    mindmap: COLORS.blue,
                     plan: COLORS.success,
                     flashcards: COLORS.warning
                   };
                   const tabLightColors = {
-                    summary: COLORS.accentOrangeLight,
-                    timeline: COLORS.accentPurpleLight,
-                    mindmap: COLORS.accentBlueLight,
-                    plan: '#ecfdf5',
-                    flashcards: '#fef3c7'
+                    summary: COLORS.primaryLight,
+                    timeline: COLORS.secondaryLight,
+                    mindmap: COLORS.blueLight,
+                    plan: COLORS.successLight,
+                    flashcards: COLORS.warningLight
                   };
-                  const color = tabColors[t.id] || COLORS.accentOrange;
-                  const lightColor = tabLightColors[t.id] || COLORS.accentOrangeLight;
+                  const color = tabColors[t.id] || COLORS.primary;
+                  const lightColor = tabLightColors[t.id] || COLORS.primaryLight;
 
                   return (
                     <button key={t.id} onClick={() => setTab(t.id)}
@@ -1226,16 +1264,16 @@ export default function Dashboard({ navigate }) {
                         borderRadius: 10,
                         border: 'none',
                         background: active ? lightColor : 'transparent',
-                        color: active ? color : COLORS.darkGray,
+                        color: active ? color : COLORS.textSecondary,
                         cursor: 'pointer', fontSize: 14,
                         fontWeight: active ? 600 : 500,
                         display: 'flex', alignItems: 'center', gap: 10,
                         whiteSpace: 'nowrap', fontFamily: 'inherit', transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                         ...(active && { boxShadow: '0 2px 8px rgba(0,0,0,0.08)' })
                       }}
-                      onMouseOver={e => { if (!active) { e.currentTarget.style.background = COLORS.lightGray; e.currentTarget.style.transform = 'translateY(-1px)'; } }}
+                      onMouseOver={e => { if (!active) { e.currentTarget.style.background = COLORS.backgroundAlt; e.currentTarget.style.transform = 'translateY(-1px)'; } }}
                       onMouseOut={e => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'translateY(0)'; } }}>
-                      <t.icon size={16} strokeWidth={active ? 2.5 : 2} color={active ? color : COLORS.darkGray} />
+                      <t.icon size={16} strokeWidth={active ? 2.5 : 2} color={active ? color : COLORS.textSecondary} />
                       {t.label}
                     </button>
                   );
@@ -1307,7 +1345,7 @@ export default function Dashboard({ navigate }) {
                                   </span>
                                 </div>
                                 <h3 style={{ margin: '0 0 8px', fontSize: 17, fontWeight: 600, color: COLORS.text, letterSpacing: '-0.01em' }}>{m.title}</h3>
-                                <p style={{ margin: 0, fontSize: 14, color: COLORS.darkGray, lineHeight: 1.7 }}>{m.desc}</p>
+                                <p style={{ margin: 0, fontSize: 14, color: COLORS.textSecondary, lineHeight: 1.7 }}>{m.desc}</p>
                               </div>
                             </div>
                           ))}
@@ -1332,13 +1370,13 @@ export default function Dashboard({ navigate }) {
                                 </div>
                                 {(node.desc || node.children.length > 0) && (
                                   <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-                                    {node.desc && <p style={{ margin: 0, fontSize: 14, color: COLORS.darkGray, lineHeight: 1.7, fontStyle: 'italic' }}>{node.desc}</p>}
+                                    {node.desc && <p style={{ margin: 0, fontSize: 14, color: COLORS.textSecondary, lineHeight: 1.7, fontStyle: 'italic' }}>{node.desc}</p>}
                                     {node.children.map(ch => (
                                       <div key={ch.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, paddingLeft: 16, padding: '12px', background: '#fafafa', borderRadius: 10, border: '1px solid #f1f5f9' }}>
                                         <CornerDownRight size={14} strokeWidth={2} color={nodeColor} style={{ flexShrink: 0, marginTop: 2 }} />
                                         <div style={{ flex: 1 }}>
                                           <p style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 500, color: COLORS.text }}>{ch.label}</p>
-                                          {ch.desc && <p style={{ margin: 0, fontSize: 13, color: COLORS.darkGray, lineHeight: 1.6 }}>{ch.desc}</p>}
+                                          {ch.desc && <p style={{ margin: 0, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.6 }}>{ch.desc}</p>}
                                         </div>
                                       </div>
                                     ))}
@@ -1504,7 +1542,7 @@ export default function Dashboard({ navigate }) {
                       <div style={{ width: 48, height: 48, borderRadius: 12, background: '#fff7ed', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <UploadCloud size={24} strokeWidth={2} color="#f97316" />
                       </div>
-                      <p style={{ fontSize: 13, color: COLORS.darkGray, margin: 0, lineHeight: 1.6 }}>No sources yet.<br />Upload a PDF to get started.</p>
+                      <p style={{ fontSize: 13, color: COLORS.textSecondary, margin: 0, lineHeight: 1.6 }}>No sources yet.<br />Upload a PDF to get started.</p>
                     </div>
                   ) : nb.sources.map((s, i) => {
                     const tog = () => upd({ sources: nb.sources.map(src => src.id === s.id ? { ...src, active: !src.active } : src) });
@@ -1517,7 +1555,7 @@ export default function Dashboard({ navigate }) {
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <p style={{ margin: 0, fontSize: 13.5, fontWeight: 500, color: COLORS.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', lineHeight: 1.4 }}>{s.name}</p>
-                          <p style={{ margin: '4px 0 0', fontSize: 11.5, color: COLORS.darkGray }}>{s.size}</p>
+                          <p style={{ margin: '4px 0 0', fontSize: 11.5, color: COLORS.textSecondary }}>{s.size}</p>
                         </div>
                         <div style={{ width: 10, height: 10, borderRadius: '50%', background: s.active ? '#f97316' : '#e2e8f0', flexShrink: 0, boxShadow: s.active ? '0 2px 6px rgba(249,115,22,0.4)' : 'none' }} />
                       </div>
@@ -1533,7 +1571,7 @@ export default function Dashboard({ navigate }) {
                 </div>
                 <div style={{ flex: 1, overflowY: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 12, scrollbarWidth: 'none', background: '#fafafa' }}>
                   {nb.chatHistory.length === 0 && (
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, textAlign: 'center', color: COLORS.darkGray }}>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, textAlign: 'center', color: COLORS.textSecondary }}>
                       <div style={{ width: 56, height: 56, borderRadius: 16, background: 'linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <MessageSquare size={28} strokeWidth={2} color="#8b5cf6" />
                       </div>
