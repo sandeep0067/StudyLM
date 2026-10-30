@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { generateOfflineContent, generateOfflineChatResponse } from './generators';
 import {
   Menu, Sparkles, Home, CheckCircle, Settings,
@@ -143,7 +143,7 @@ function GenerateIllustration({ width = 160, height = 160 }) {
       </defs>
       <circle cx="80" cy="80" r="70" fill="url(#genGrad)" opacity="0.1" />
       {/* Brain/AI icon */}
-      <circle cx="80" cy="60" r="25" fill={COLORS.secondaryLight} stroke={COLORS.secondary} strokeWidth="2} />
+      <circle cx="80" cy="60" r="25" fill={COLORS.secondaryLight} stroke={COLORS.secondary} strokeWidth="2" />
       <path d="M60 60C60 50 70 45 80 45C90 45 100 50 100 60" stroke={COLORS.secondary} strokeWidth="2" fill="none" />
       <path d="M65 75C65 85 75 90 80 90C85 90 95 85 95 75" stroke={COLORS.secondary} strokeWidth="2" fill="none" />
       {/* Sparkles */}
@@ -177,7 +177,7 @@ function parseInline(text) {
   return parts.length ? parts : text;
 }
 
-function MD({ content }) {
+const MD = React.memo(function MD({ content }) {
   if (!content) return null;
   const lines = content.split('\n');
   const out = []; let codeLines = [], codeLang = '', inCode = false, listItems = [];
@@ -227,7 +227,7 @@ function MD({ content }) {
   }
   flushList(lines.length);
   return <div>{out}</div>;
-}
+});
 
 /* ─────────────────────────────────────────
    PARSERS
@@ -626,6 +626,8 @@ export default function Dashboard({ navigate }) {
   const fileInputRef = useRef(null);
   const chatEndRef   = useRef(null);
   const renameRef    = useRef(null);
+  const storageWriteRef = useRef(null);
+  const resizeFrameRef = useRef(null);
 
   // All useState calls must come before useEffect
   const [notebooks, setNotebooks] = useState(() => {
@@ -659,7 +661,11 @@ export default function Dashboard({ navigate }) {
 
   // All useEffect calls after useState
   useEffect(() => {
-    localStorage.setItem('meridian_workspaces', JSON.stringify(notebooks));
+    window.clearTimeout(storageWriteRef.current);
+    storageWriteRef.current = window.setTimeout(() => {
+      localStorage.setItem('meridian_workspaces', JSON.stringify(notebooks));
+    }, 180);
+    return () => window.clearTimeout(storageWriteRef.current);
   }, [notebooks]);
 
   useEffect(() => {
@@ -678,14 +684,25 @@ export default function Dashboard({ navigate }) {
 
   useEffect(() => {
     if (!isDraggingR) return;
-    const onMove = e => setRWidth(Math.max(250, Math.min(800, window.innerWidth - e.clientX)));
-    const onUp = () => setIsDraggingR(false);
+    const onMove = e => {
+      const width = Math.max(250, Math.min(800, window.innerWidth - e.clientX));
+      if (resizeFrameRef.current) window.cancelAnimationFrame(resizeFrameRef.current);
+      resizeFrameRef.current = window.requestAnimationFrame(() => setRWidth(width));
+    };
+    const onUp = () => {
+      if (resizeFrameRef.current) window.cancelAnimationFrame(resizeFrameRef.current);
+      setIsDraggingR(false);
+    };
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
-    return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+    return () => {
+      if (resizeFrameRef.current) window.cancelAnimationFrame(resizeFrameRef.current);
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+    };
   }, [isDraggingR]);
 
-  const nb = notebooks.find(n => n.id === activeId) || null;
+  const nb = useMemo(() => notebooks.find(n => n.id === activeId) || null, [notebooks, activeId]);
 
   useEffect(() => {
     setApiKey(localStorage.getItem('meridian_api_key') || '');
@@ -756,7 +773,7 @@ export default function Dashboard({ navigate }) {
 
   /* ── Unified API Call ── */
   const callAPI = async (sys, prompt, isJson = false) => {
-    const provider = localStorage.getItem('api_provider') || 'groq';
+    const provider = apiProvider;
     if (provider === 'groq') {
       return callGroq(sys, prompt, isJson);
     } else {
@@ -771,7 +788,7 @@ export default function Dashboard({ navigate }) {
     try {
       const srcText = nb.sources.filter(s => s.active)
         .map(s => `[${s.name}]:\n${s.text}`).join('\n\n---\n\n');
-      const provider = localStorage.getItem('api_provider') || 'groq';
+      const provider = apiProvider;
       
       if (provider === 'gemini' && !apiKey) {
         // Fall back to offline mode for Gemini if no key
@@ -821,13 +838,13 @@ export default function Dashboard({ navigate }) {
     if (!chatMsg.trim() || isTyping) return;
     const hist = [...(nb?.chatHistory || []), { sender: 'user', text: chatMsg.trim() }];
     upd({ chatHistory: hist }); setChatMsg(''); setIsTyping(true);
-    const provider = localStorage.getItem('api_provider') || 'groq';
+    const provider = apiProvider;
     
     if (provider === 'gemini' && !apiKey) {
       setTimeout(() => {
         setIsTyping(false);
         upd({ chatHistory: [...hist, { sender: 'assistant', text: generateOfflineChatResponse(chatMsg, nb) }] });
-      }, 650);
+      }, 180);
       return;
     }
     try {
@@ -859,6 +876,11 @@ export default function Dashboard({ navigate }) {
           const page = await pdf.getPage(i);
           const c = await page.getTextContent();
           text += `\n[p.${i}] ` + c.items.map(x => x.str).join(' ');
+          // Let the browser paint between batches when importing long PDFs.
+          if (i % 4 === 0 && i < pdf.numPages) {
+            setParsing(`Reading ${file.name}… ${Math.round((i / pdf.numPages) * 100)}%`);
+            await new Promise(resolve => window.requestAnimationFrame(resolve));
+          }
         }
         const src = {
           id: 'pdf-' + Date.now(), name: file.name, type: 'pdf',
@@ -928,11 +950,13 @@ export default function Dashboard({ navigate }) {
   const flashcards    = nb?.flashcards || [];
   const hasData       = tab === 'flashcards' ? flashcards.length > 0 : !!currentData;
   const hasSources    = nb?.sources?.some(s => s.active);
-  const tlItems       = tab === 'timeline' && currentData ? parseTimeline(currentData)  : [];
-  const mmNodes       = tab === 'mindmap'  && currentData ? parseMindmap(currentData)   : [];
-  const rmPhases      = tab === 'plan'     && currentData ? parseRoadmap(currentData)   : [];
-  const sourceCount   = notebooks.reduce((sum, book) => sum + (book.sources?.length || 0), 0);
-  const activeSources = notebooks.reduce((sum, book) => sum + (book.sources?.filter(s => s.active).length || 0), 0);
+  const tlItems = useMemo(() => tab === 'timeline' && currentData ? parseTimeline(currentData) : [], [tab, currentData]);
+  const mmNodes = useMemo(() => tab === 'mindmap' && currentData ? parseMindmap(currentData) : [], [tab, currentData]);
+  const rmPhases = useMemo(() => tab === 'plan' && currentData ? parseRoadmap(currentData) : [], [tab, currentData]);
+  const { sourceCount, activeSources } = useMemo(() => notebooks.reduce((totals, book) => ({
+    sourceCount: totals.sourceCount + (book.sources?.length || 0),
+    activeSources: totals.activeSources + (book.sources?.filter(s => s.active).length || 0),
+  }), { sourceCount: 0, activeSources: 0 }), [notebooks]);
 
   const renderTabHeader = (title, subtitle) => {
     const tabColors = {
